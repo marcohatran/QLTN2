@@ -96,5 +96,29 @@ namespace QLTN2
                 f.Show();
             }
         }
+
+        private void barButtonItem3_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            Form f = this.CheckExists(typeof(frmGV));
+            if (f != null) f.Activate();
+            else
+            {
+                f = new frmGV();
+                f.MdiParent = this;
+                f.Show();
+            }
+        }
+
+        private void barButtonItem4_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            Form f = this.CheckExists(typeof(frmBode));
+            if (f != null) f.Activate();
+            else
+            {
+                f = new frmBode();
+                f.MdiParent = this;
+                f.Show();
+            }
+        }
     }
 }

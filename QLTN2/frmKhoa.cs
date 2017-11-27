@@ -17,7 +17,7 @@ namespace QLTN2
         private Boolean isThem = false, isSua = false;
         private String maCS;
         private String cMAKH, cTENKH;
-        private String strLoi = "Mã khoa hoặc tên khoa đã tồn tại.\nXin kiểm tra lại";
+        private DataRowView drv;
         public frmKhoa()
         {
             InitializeComponent();
@@ -67,12 +67,20 @@ namespace QLTN2
 
         private void btnSua_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            current = bdsKhoa.Position;
-            groupBox1.Enabled = true;
-            btnThem.Enabled = btnSua.Enabled = btnXoa.Enabled = kHOAGridControl.Enabled = false;
+            btnThem.Enabled = btnSua.Enabled = btnXoa.Enabled = false;
             isSua = true;
-            cMAKH = ((DataRowView)bdsKhoa[current])["MAKH"].ToString().Trim();
-            cTENKH = ((DataRowView)bdsKhoa[current])["TENKH"].ToString().Trim();
+            sua();
+        }
+
+        private void sua()
+        {
+            current = bdsKhoa.Position;
+            drv = (DataRowView)bdsKhoa.Current;
+            cMAKH = drv["MAKH"].ToString().Trim();
+            cTENKH = drv["TENKH"].ToString().Trim();
+            kHOAGridControl.Enabled = false;
+            groupBox1.Enabled = true;
+
         }
 
         private void btnBack_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -143,31 +151,35 @@ namespace QLTN2
                 txtMAKH.Focus();
                 return;
             }
-            if (isThem)
+        
+            String strLenh = "Exec dbo.SP_kiemtra_khoa '" + txtMAKH.Text.Trim() + "', N'" + txtTENKH.Text.Trim() + "'";
+            SqlDataReader myReader;
+            myReader = Program.ExecSqlDataReader(strLenh);
+            if (myReader == null) return;
+            myReader.Read();
+            int ret = myReader.GetInt32(0);
+            myReader.Close();
+            Program.conn.Close();
+            if (ret == 1)
             {
-                String strLenh = "Exec dbo.SP_KHOA_THEM '" + txtMAKH.Text.Trim() + "', N'" + txtTENKH.Text.Trim() + "','" + maCS + "'";
-                if (Program.ExecSqlNonQuery(strLenh, strLoi) != 0)
-                {
-                    them();
-                }
+                MessageBox.Show("Mã khoa hoặc tên khoa đã tồn tại.\nXin kiểm tra lại", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (isSua)
+            try
             {
-                if (txtMAKH.Text.Trim() != cMAKH || txtTENKH.Text.Trim() != cTENKH)
-                {
-                    String strLenh = "Exec dbo.SP_KHOA_SUA '" + txtMAKH.Text.Trim() + "', N'" + txtTENKH.Text.Trim() + "','" + cMAKH + "'";
-                    if (Program.ExecSqlNonQuery(strLenh, strLoi) == 0)
-                        return;
-                    else
-                    {
-                        bdsKhoa.EndEdit();
-                        bdsKhoa.ResetCurrentItem();
-                    }
-                }
-                groupBox1.Enabled = false;
-                kHOAGridControl.Enabled = true;
+                bdsKhoa.EndEdit();
+                taKhoa.Update(DS.KHOA);
+                bdsKhoa.ResetCurrentItem();
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            if (isThem) {
+                them();
+            }
+            else
+                sua();
         }
 
         private void btnHuy_Click(object sender, EventArgs e)
@@ -190,10 +202,7 @@ namespace QLTN2
         {
             if (isSua && bdsKhoa.Position == current)
             {
-                cMAKH = ((DataRowView)bdsKhoa[current])["MAKH"].ToString().Trim();
-                cTENKH = ((DataRowView)bdsKhoa[current])["TENKH"].ToString().Trim();
-                groupBox1.Enabled = true;
-                kHOAGridControl.Enabled = false;
+                sua();
             }
         }
 
@@ -201,11 +210,7 @@ namespace QLTN2
         {
             if (isSua)
             {
-                current = bdsKhoa.Position;
-                cMAKH = ((DataRowView)bdsKhoa[current])["MAKH"].ToString().Trim();
-                cTENKH = ((DataRowView)bdsKhoa[current])["TENKH"].ToString().Trim();
-                groupBox1.Enabled = true;
-                kHOAGridControl.Enabled = false;
+                sua();
             }
         }
 

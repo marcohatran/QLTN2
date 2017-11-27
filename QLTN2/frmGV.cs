@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DevExpress.XtraGrid.Columns;
+using DevExpress.XtraGrid.Views.Base;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,15 +13,15 @@ using System.Windows.Forms;
 
 namespace QLTN2
 {
-    public partial class fromGV : Form
+    public partial class frmGV : Form
     {
         int current;
         private Boolean isThem = false, isSua = false;
-        private String maCS;
         private String cMAGV, cHo, cTen, cHV, cMAKH;
-        Boolean isLoi = false;
-        DataRowView drv;
-        public fromGV()
+        private Boolean isLoi = false;
+        private DataRowView drv;
+        private ViewColumnFilterInfo filterInfo;
+        public frmGV()
         {
             InitializeComponent();
         }
@@ -36,6 +38,18 @@ namespace QLTN2
             cmbMAKH.DataSource = bdsKhoa;
             cmbMAKH.DisplayMember = "MAKH";
             cmbMAKH.ValueMember = "MAKH";
+
+            String strFilter = "";
+            int count = cmbMAKH.Items.Count;
+            for (int i = 0; i < count-1; i++)
+            {
+                cmbMAKH.SelectedIndex = i;
+                strFilter += "[MAKH] = '" + cmbMAKH.SelectedValue +"'OR ";
+            }
+            cmbMAKH.SelectedIndex = count - 1;
+            strFilter += "[MAKH] = '" + cmbMAKH.SelectedValue +"'";
+            filterInfo = new ViewColumnFilterInfo(gridView1.Columns["MAKH"], new ColumnFilterInfo (strFilter));
+            
             this.taGV.Fill(this.DS.GIAOVIEN);
             this.taBode.Fill(this.DS.BODE);
             this.taGVDK.Fill(this.DS.GIAOVIEN_DANGKY);
@@ -109,7 +123,6 @@ namespace QLTN2
 
         private void btnThem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            cmbMAKH.DropDownStyle = ComboBoxStyle.DropDownList;
             cMAGV = cHo = cTen = cHV = "";
             cmbMAKH.SelectedIndex = 0;
             groupBox1.Enabled = btnBack.Enabled = true;
@@ -128,23 +141,16 @@ namespace QLTN2
 
         private void btnSua_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            current = bdsGV.Position;
-            drv = (DataRowView)bdsGV.Current;
-            String makh = drv["MAKH"].ToString();
-            if (cmbMAKH.SelectedIndex == -1 || cmbMAKH.SelectedValue.ToString() != makh)
-            {
-                    MessageBox.Show("Không thể sửa GV này");
-                    return;
-            }
+            gridView1.ActiveFilter.Add(filterInfo);
+            MAKH.OptionsFilter.AllowFilter = false;
             isSua = true;
             btnBack.Enabled = true;
-            btnThem.Enabled = btnSua.Enabled = btnXoa.Enabled = gIAOVIENGridControl.Enabled = btnLammoi.Enabled = false;
-            sua();
+            btnThem.Enabled = btnSua.Enabled = btnXoa.Enabled = btnLammoi.Enabled = false;
         }
 
         private void sua()
         {
-            cmbMAKH.DropDownStyle = ComboBoxStyle.DropDownList;
+            drv = (DataRowView)bdsGV.Current;
             cMAGV = drv["MAGV"].ToString().Trim();
             cHo = drv["HO"].ToString().Trim();
             cTen = drv["TEN"].ToString().Trim();
@@ -154,21 +160,22 @@ namespace QLTN2
             gIAOVIENGridControl.Enabled = false;
         }
 
-        private void gridView1_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
+        private void gridView1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (isSua)
+            if (isSua && e.KeyCode == Keys.Enter)
             {
-                current = bdsGV.Position;
-                drv = (DataRowView)bdsGV.Current;
-                String makh = drv["MAKH"].ToString();
-                if (cmbMAKH.SelectedValue.ToString() != makh)
-                {
-                    MessageBox.Show("Không thể sửa GV này");
-                    return;
-                }
                 sua();
             }
         }
+
+        private void gridView1_RowClick(object sender, DevExpress.XtraGrid.Views.Grid.RowClickEventArgs e)
+        {
+            if (isSua)
+            {
+                sua();
+            }
+        }
+
         private void btnXoa_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             if (bdsBode.Count != 0 || bdsGVDK.Count != 0)
@@ -216,7 +223,8 @@ namespace QLTN2
             gIAOVIENGridControl.Enabled = true;
             isThem = isSua = groupBox1.Enabled = btnBack.Enabled = false;
             btnSua.Enabled = btnXoa.Enabled = btnThem.Enabled = btnLammoi.Enabled = true;
-            cmbMAKH.DropDownStyle = ComboBoxStyle.DropDown;
+            gridView1.ActiveFilter.Clear();
+            MAKH.OptionsFilter.AllowFilter = true;
         }
 
         public void hoiPhuc()
@@ -227,8 +235,8 @@ namespace QLTN2
                 {
                     txtMAGV.Text = cMAGV; txtHo.Text = cHo; txtTen.Text = cTen; txtHV.Text = cHV;
                     bdsGV.EndEdit();
-                    bdsGV.ResetCurrentItem();
                     taGV.Update(DS.GIAOVIEN);
+                    bdsGV.ResetCurrentItem();
                     isLoi = false;
                 }
                 else
@@ -239,7 +247,7 @@ namespace QLTN2
             }
             else
             {
-                bdsGV.EndEdit();
+                bdsGV.CancelEdit();
                 bdsGV.RemoveCurrent();
             }
         }

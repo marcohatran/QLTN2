@@ -68,6 +68,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DS_PHANMANH.xsd</DependentUpon>
     </Compile>
+    <Compile Include="frmBode.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmBode.Designer.cs">
+      <DependentUpon>frmBode.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmDangnhap.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,14 +110,17 @@
     <Compile Include="frmSV.Designer.cs">
       <DependentUpon>frmSV.cs</DependentUpon>
     </Compile>
-    <Compile Include="fromGV.cs">
+    <Compile Include="frmGV.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="fromGV.Designer.cs">
-      <DependentUpon>fromGV.cs</DependentUpon>
+    <Compile Include="frmGV.Designer.cs">
+      <DependentUpon>frmGV.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmBode.resx">
+      <DependentUpon>frmBode.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmDangnhap.resx">
       <DependentUpon>frmDangnhap.cs</DependentUpon>
     </EmbeddedResource>
@@ -124,8 +133,8 @@
     <EmbeddedResource Include="frmMonhoc.resx">
       <DependentUpon>frmMonhoc.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="fromGV.resx">
-      <DependentUpon>fromGV.cs</DependentUpon>
+    <EmbeddedResource Include="frmGV.resx">
+      <DependentUpon>frmGV.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">

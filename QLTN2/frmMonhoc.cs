@@ -15,6 +15,7 @@ namespace QLTN2
     {
         int current;
         private Boolean isThem = false, isSua = false;
+        private Boolean isLoi = false;
         private String cMAMH, cTENMH;
         DataRowView drv;
 
@@ -63,28 +64,30 @@ namespace QLTN2
                 if (rs == DialogResult.No)
                     return;
             }
+            bdsMonhoc.CancelEdit();
             if (isThem)
             {
-                bdsMonhoc.EndEdit();
                 bdsMonhoc.RemoveCurrent();
                 bdsMonhoc.Position = current;
             }
             else
                 {
+                if (isLoi)
+                {
                     txtMAMH.Text = cMAMH;
                     txtTENMH.Text = cTENMH;
                     bdsMonhoc.EndEdit();
-                    bdsMonhoc.ResetCurrentItem();
                     taMonhoc.Update(DS.MONHOC);
                 }
+                bdsMonhoc.ResetCurrentItem();
+            }
             mONHOCGridControl.Enabled = true;
-            isThem = isSua = groupBox1.Enabled = btnBack.Enabled = false;
+            isThem = isSua = isLoi = groupBox1.Enabled = btnBack.Enabled = false;
             btnSua.Enabled = btnXoa.Enabled = btnThem.Enabled = btnLammoi.Enabled = true;
         }
 
         private void btnSua_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            current = bdsMonhoc.Position;
             groupBox1.Enabled = btnBack.Enabled = true;
             btnThem.Enabled = btnSua.Enabled = btnXoa.Enabled = mONHOCGridControl.Enabled = btnLammoi.Enabled= false;
             isSua = true;
@@ -93,6 +96,7 @@ namespace QLTN2
 
         private void sua()
         {
+            current = bdsMonhoc.Position;
             drv = (DataRowView)bdsMonhoc.Current;
             cMAMH = drv["MAMH"].ToString().Trim();
             cTENMH = drv["TENMH"].ToString().Trim();
@@ -121,7 +125,6 @@ namespace QLTN2
         {
             if (isSua)
             {
-                current = bdsMonhoc.Position;
                 sua();
             }
         }
@@ -194,6 +197,7 @@ namespace QLTN2
                     MessageBox.Show("mã môn học hoặc tên môn học bận cập nhật đã tồn tại.\n Xin kiểm tra lại", "Phi phạm ràng buộc", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 else
                     MessageBox.Show(ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                isLoi = true;
                 return;
             }
             if (isThem)

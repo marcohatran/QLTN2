@@ -24,7 +24,7 @@ namespace QLTN2
             SkinManager.EnableFormSkins();
             frmChinh = new frmMain();
             //Application.Run(frmChinh);
-            Application.Run(new fromGV());
+            Application.Run(frmChinh);
         }
         public static SqlConnection conn = new SqlConnection();
         public static String connstr;
@@ -98,44 +98,23 @@ namespace QLTN2
 
         }
 
-        public static int ExecSqlNonQuery(String strLenh, String strLoi)
-        {
-            int count = 0;
-            if (Program.conn.State == ConnectionState.Closed)
-                Program.conn.Open();
-            SqlCommand sqlcmd = Program.conn.CreateCommand();
-            try
-            {
-                sqlcmd.CommandText = strLenh;
-                count = sqlcmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                SqlException sqle = (SqlException)ex;
-                if (sqle.Number == 2627)
-                    MessageBox.Show(strLoi, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                else
-                    MessageBox.Show(ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return count;
-        }
 
-            public static int ExecSqlNonQuery(String strLenh)
+            public static Boolean ExecSqlNonQuery(String strLenh)
             {
-                int count = 0;
                 if (Program.conn.State == ConnectionState.Closed)
                     Program.conn.Open();
                 SqlCommand sqlcmd = Program.conn.CreateCommand();
                 try
                 {
                     sqlcmd.CommandText = strLenh;
-                    count = sqlcmd.ExecuteNonQuery();
+                    sqlcmd.ExecuteNonQuery();
+                    return true;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
                 }
-                return count;
             }
         }
     }

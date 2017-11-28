@@ -123,6 +123,7 @@ namespace QLTN2
 
         private void btnThem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            cmbMAKH.DropDownStyle = ComboBoxStyle.DropDownList;
             cMAGV = cHo = cTen = cHV = "";
             cmbMAKH.SelectedIndex = 0;
             groupBox1.Enabled = btnBack.Enabled = true;
@@ -141,6 +142,7 @@ namespace QLTN2
 
         private void btnSua_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            cmbMAKH.DropDownStyle = ComboBoxStyle.DropDownList;
             gridView1.ActiveFilter.Add(filterInfo);
             MAKH.OptionsFilter.AllowFilter = false;
             isSua = true;
@@ -201,13 +203,7 @@ namespace QLTN2
 
         private void btnLammoi_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            this.taKhoa.Fill(this.DS.KHOA);
-            cmbMAKH.DataSource = bdsKhoa;
-            cmbMAKH.DisplayMember = "MAKH";
-            cmbMAKH.ValueMember = "MAKH";
             this.taGV.Fill(this.DS.GIAOVIEN);
-            this.taBode.Fill(this.DS.BODE);
-            this.taGVDK.Fill(this.DS.GIAOVIEN_DANGKY);
         }
 
         private void btnBack_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -219,12 +215,14 @@ namespace QLTN2
                     return;
             }
             hoiPhuc();
-            bdsGV.Position = current;
-            gIAOVIENGridControl.Enabled = true;
+            cmbMAKH.DropDownStyle = ComboBoxStyle.DropDown;
             isThem = isSua = groupBox1.Enabled = btnBack.Enabled = false;
             btnSua.Enabled = btnXoa.Enabled = btnThem.Enabled = btnLammoi.Enabled = true;
+            bdsGV.Position = current;
+            gIAOVIENGridControl.Enabled = true;
             gridView1.ActiveFilter.Clear();
             MAKH.OptionsFilter.AllowFilter = true;
+
         }
 
         public void hoiPhuc()
@@ -247,7 +245,7 @@ namespace QLTN2
             }
             else
             {
-                bdsGV.CancelEdit();
+                bdsGV.EndEdit();
                 bdsGV.RemoveCurrent();
             }
         }

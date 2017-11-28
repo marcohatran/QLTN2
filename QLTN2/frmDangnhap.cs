@@ -31,7 +31,6 @@ namespace QLTN2
             {
                 MessageBox.Show(ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
             cOSOComboBox.SelectedIndex = -1;
 
         }

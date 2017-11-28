@@ -67,18 +67,20 @@
             this.colDAP_AN = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colMAGV = new DevExpress.XtraGrid.Columns.GridColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cmbMAMH = new System.Windows.Forms.ComboBox();
             this.btnHuy = new DevExpress.XtraEditors.SimpleButton();
             this.btnGhi = new DevExpress.XtraEditors.SimpleButton();
-            this.mAMHTextEdit = new DevExpress.XtraEditors.TextEdit();
-            this.cAUHOISpinEdit = new DevExpress.XtraEditors.SpinEdit();
-            this.tRINHDOTextEdit = new DevExpress.XtraEditors.TextEdit();
-            this.nOIDUNGTextEdit = new DevExpress.XtraEditors.TextEdit();
-            this.aTextEdit = new DevExpress.XtraEditors.TextEdit();
-            this.bTextEdit = new DevExpress.XtraEditors.TextEdit();
-            this.cTextEdit = new DevExpress.XtraEditors.TextEdit();
-            this.dTextEdit = new DevExpress.XtraEditors.TextEdit();
-            this.dAP_ANTextEdit = new DevExpress.XtraEditors.TextEdit();
-            this.mAGVTextEdit = new DevExpress.XtraEditors.TextEdit();
+            this.spnCauhoi = new DevExpress.XtraEditors.SpinEdit();
+            this.txtTrinhdo = new DevExpress.XtraEditors.TextEdit();
+            this.txtNoidung = new DevExpress.XtraEditors.TextEdit();
+            this.txtA = new DevExpress.XtraEditors.TextEdit();
+            this.txtB = new DevExpress.XtraEditors.TextEdit();
+            this.txtC = new DevExpress.XtraEditors.TextEdit();
+            this.txtD = new DevExpress.XtraEditors.TextEdit();
+            this.txtDapan = new DevExpress.XtraEditors.TextEdit();
+            this.txtMAGV = new DevExpress.XtraEditors.TextEdit();
+            this.bdsMonhoc = new System.Windows.Forms.BindingSource(this.components);
+            this.taMonhoc = new QLTN2.DSTableAdapters.MONHOCTableAdapter();
             mAMHLabel = new System.Windows.Forms.Label();
             cAUHOILabel = new System.Windows.Forms.Label();
             tRINHDOLabel = new System.Windows.Forms.Label();
@@ -95,16 +97,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.bODEGridControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mAMHTextEdit.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cAUHOISpinEdit.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tRINHDOTextEdit.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nOIDUNGTextEdit.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.aTextEdit.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bTextEdit.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cTextEdit.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dTextEdit.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dAP_ANTextEdit.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mAGVTextEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.spnCauhoi.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTrinhdo.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtNoidung.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtA.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtB.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtC.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtD.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtDapan.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMAGV.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bdsMonhoc)).BeginInit();
             this.SuspendLayout();
             // 
             // mAMHLabel
@@ -247,6 +249,7 @@
             this.btnBack.Caption = "Back";
             this.btnBack.Id = 0;
             this.btnBack.Name = "btnBack";
+            this.btnBack.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnBack_ItemClick);
             // 
             // btnThem
             // 
@@ -260,12 +263,14 @@
             this.btnSua.Caption = "Hiệu chỉnh";
             this.btnSua.Id = 2;
             this.btnSua.Name = "btnSua";
+            this.btnSua.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnSua_ItemClick);
             // 
             // btnXoa
             // 
             this.btnXoa.Caption = "Xóa";
             this.btnXoa.Id = 3;
             this.btnXoa.Name = "btnXoa";
+            this.btnXoa.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnXoa_ItemClick);
             // 
             // btnLammoi
             // 
@@ -308,6 +313,7 @@
             // DS
             // 
             this.DS.DataSetName = "DS";
+            this.DS.EnforceConstraints = false;
             this.DS.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // bdsBode
@@ -364,6 +370,8 @@
             this.gridView1.Name = "gridView1";
             this.gridView1.OptionsBehavior.Editable = false;
             this.gridView1.OptionsSelection.EnableAppearanceFocusedCell = false;
+            this.gridView1.RowClick += new DevExpress.XtraGrid.Views.Grid.RowClickEventHandler(this.gridView1_RowClick);
+            this.gridView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridView1_KeyDown);
             // 
             // colMAMH
             // 
@@ -457,28 +465,29 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.cmbMAMH);
             this.groupBox1.Controls.Add(this.btnHuy);
             this.groupBox1.Controls.Add(this.btnGhi);
             this.groupBox1.Controls.Add(mAMHLabel);
-            this.groupBox1.Controls.Add(this.mAMHTextEdit);
             this.groupBox1.Controls.Add(cAUHOILabel);
-            this.groupBox1.Controls.Add(this.cAUHOISpinEdit);
+            this.groupBox1.Controls.Add(this.spnCauhoi);
             this.groupBox1.Controls.Add(tRINHDOLabel);
-            this.groupBox1.Controls.Add(this.tRINHDOTextEdit);
+            this.groupBox1.Controls.Add(this.txtTrinhdo);
             this.groupBox1.Controls.Add(nOIDUNGLabel);
-            this.groupBox1.Controls.Add(this.nOIDUNGTextEdit);
+            this.groupBox1.Controls.Add(this.txtNoidung);
             this.groupBox1.Controls.Add(aLabel);
-            this.groupBox1.Controls.Add(this.aTextEdit);
+            this.groupBox1.Controls.Add(this.txtA);
             this.groupBox1.Controls.Add(bLabel);
-            this.groupBox1.Controls.Add(this.bTextEdit);
+            this.groupBox1.Controls.Add(this.txtB);
             this.groupBox1.Controls.Add(cLabel);
-            this.groupBox1.Controls.Add(this.cTextEdit);
+            this.groupBox1.Controls.Add(this.txtC);
             this.groupBox1.Controls.Add(dLabel);
-            this.groupBox1.Controls.Add(this.dTextEdit);
+            this.groupBox1.Controls.Add(this.txtD);
             this.groupBox1.Controls.Add(dAP_ANLabel);
-            this.groupBox1.Controls.Add(this.dAP_ANTextEdit);
+            this.groupBox1.Controls.Add(this.txtDapan);
             this.groupBox1.Controls.Add(mAGVLabel);
-            this.groupBox1.Controls.Add(this.mAGVTextEdit);
+            this.groupBox1.Controls.Add(this.txtMAGV);
+            this.groupBox1.Cursor = System.Windows.Forms.Cursors.No;
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Enabled = false;
             this.groupBox1.Location = new System.Drawing.Point(0, 236);
@@ -486,7 +495,17 @@
             this.groupBox1.Size = new System.Drawing.Size(951, 320);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
-            this.groupBox1.UseWaitCursor = true;
+            // 
+            // cmbMAMH
+            // 
+            this.cmbMAMH.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bdsBode, "MAMH", true));
+            this.cmbMAMH.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMAMH.FormattingEnabled = true;
+            this.cmbMAMH.Location = new System.Drawing.Point(136, 30);
+            this.cmbMAMH.Name = "cmbMAMH";
+            this.cmbMAMH.Size = new System.Drawing.Size(117, 25);
+            this.cmbMAMH.TabIndex = 24;
+            this.cmbMAMH.UseWaitCursor = true;
             // 
             // btnHuy
             // 
@@ -496,6 +515,7 @@
             this.btnHuy.TabIndex = 23;
             this.btnHuy.Text = "Hủy";
             this.btnHuy.UseWaitCursor = true;
+            this.btnHuy.Click += new System.EventHandler(this.btnHuy_Click);
             // 
             // btnGhi
             // 
@@ -505,113 +525,109 @@
             this.btnGhi.TabIndex = 22;
             this.btnGhi.Text = "Ghi";
             this.btnGhi.UseWaitCursor = true;
+            this.btnGhi.Click += new System.EventHandler(this.btnGhi_Click);
             // 
-            // mAMHTextEdit
+            // spnCauhoi
             // 
-            this.mAMHTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "MAMH", true));
-            this.mAMHTextEdit.Location = new System.Drawing.Point(136, 35);
-            this.mAMHTextEdit.MenuManager = this.barManager1;
-            this.mAMHTextEdit.Name = "mAMHTextEdit";
-            this.mAMHTextEdit.Size = new System.Drawing.Size(117, 20);
-            this.mAMHTextEdit.TabIndex = 1;
-            this.mAMHTextEdit.UseWaitCursor = true;
-            // 
-            // cAUHOISpinEdit
-            // 
-            this.cAUHOISpinEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "CAUHOI", true));
-            this.cAUHOISpinEdit.EditValue = new decimal(new int[] {
+            this.spnCauhoi.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "CAUHOI", true, System.Windows.Forms.DataSourceUpdateMode.OnValidation, "0", "N0"));
+            this.spnCauhoi.EditValue = new decimal(new int[] {
             0,
             0,
             0,
             0});
-            this.cAUHOISpinEdit.Location = new System.Drawing.Point(332, 35);
-            this.cAUHOISpinEdit.MenuManager = this.barManager1;
-            this.cAUHOISpinEdit.Name = "cAUHOISpinEdit";
-            this.cAUHOISpinEdit.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            this.spnCauhoi.Location = new System.Drawing.Point(332, 35);
+            this.spnCauhoi.MenuManager = this.barManager1;
+            this.spnCauhoi.Name = "spnCauhoi";
+            this.spnCauhoi.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.cAUHOISpinEdit.Size = new System.Drawing.Size(124, 20);
-            this.cAUHOISpinEdit.TabIndex = 3;
-            this.cAUHOISpinEdit.UseWaitCursor = true;
+            this.spnCauhoi.Properties.IsFloatValue = false;
+            this.spnCauhoi.Properties.Mask.EditMask = "f0";
+            this.spnCauhoi.Properties.Mask.UseMaskAsDisplayFormat = true;
+            this.spnCauhoi.Size = new System.Drawing.Size(124, 20);
+            this.spnCauhoi.TabIndex = 3;
             // 
-            // tRINHDOTextEdit
+            // txtTrinhdo
             // 
-            this.tRINHDOTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "TRINHDO", true));
-            this.tRINHDOTextEdit.Location = new System.Drawing.Point(531, 35);
-            this.tRINHDOTextEdit.MenuManager = this.barManager1;
-            this.tRINHDOTextEdit.Name = "tRINHDOTextEdit";
-            this.tRINHDOTextEdit.Size = new System.Drawing.Size(132, 20);
-            this.tRINHDOTextEdit.TabIndex = 5;
-            this.tRINHDOTextEdit.UseWaitCursor = true;
+            this.txtTrinhdo.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "TRINHDO", true));
+            this.txtTrinhdo.Location = new System.Drawing.Point(531, 35);
+            this.txtTrinhdo.MenuManager = this.barManager1;
+            this.txtTrinhdo.Name = "txtTrinhdo";
+            this.txtTrinhdo.Size = new System.Drawing.Size(132, 20);
+            this.txtTrinhdo.TabIndex = 5;
             // 
-            // nOIDUNGTextEdit
+            // txtNoidung
             // 
-            this.nOIDUNGTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "NOIDUNG", true));
-            this.nOIDUNGTextEdit.Location = new System.Drawing.Point(136, 65);
-            this.nOIDUNGTextEdit.MenuManager = this.barManager1;
-            this.nOIDUNGTextEdit.Name = "nOIDUNGTextEdit";
-            this.nOIDUNGTextEdit.Size = new System.Drawing.Size(527, 20);
-            this.nOIDUNGTextEdit.TabIndex = 7;
-            this.nOIDUNGTextEdit.UseWaitCursor = true;
+            this.txtNoidung.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "NOIDUNG", true));
+            this.txtNoidung.Location = new System.Drawing.Point(136, 65);
+            this.txtNoidung.MenuManager = this.barManager1;
+            this.txtNoidung.Name = "txtNoidung";
+            this.txtNoidung.Size = new System.Drawing.Size(527, 20);
+            this.txtNoidung.TabIndex = 7;
             // 
-            // aTextEdit
+            // txtA
             // 
-            this.aTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "A", true));
-            this.aTextEdit.Location = new System.Drawing.Point(136, 94);
-            this.aTextEdit.MenuManager = this.barManager1;
-            this.aTextEdit.Name = "aTextEdit";
-            this.aTextEdit.Size = new System.Drawing.Size(341, 20);
-            this.aTextEdit.TabIndex = 9;
-            this.aTextEdit.UseWaitCursor = true;
+            this.txtA.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "A", true));
+            this.txtA.Location = new System.Drawing.Point(136, 94);
+            this.txtA.MenuManager = this.barManager1;
+            this.txtA.Name = "txtA";
+            this.txtA.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.DateTime;
+            this.txtA.Size = new System.Drawing.Size(341, 20);
+            this.txtA.TabIndex = 9;
             // 
-            // bTextEdit
+            // txtB
             // 
-            this.bTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "B", true));
-            this.bTextEdit.Location = new System.Drawing.Point(531, 94);
-            this.bTextEdit.MenuManager = this.barManager1;
-            this.bTextEdit.Name = "bTextEdit";
-            this.bTextEdit.Size = new System.Drawing.Size(341, 20);
-            this.bTextEdit.TabIndex = 11;
-            this.bTextEdit.UseWaitCursor = true;
+            this.txtB.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "B", true));
+            this.txtB.Location = new System.Drawing.Point(531, 94);
+            this.txtB.MenuManager = this.barManager1;
+            this.txtB.Name = "txtB";
+            this.txtB.Size = new System.Drawing.Size(341, 20);
+            this.txtB.TabIndex = 11;
             // 
-            // cTextEdit
+            // txtC
             // 
-            this.cTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "C", true));
-            this.cTextEdit.Location = new System.Drawing.Point(136, 125);
-            this.cTextEdit.MenuManager = this.barManager1;
-            this.cTextEdit.Name = "cTextEdit";
-            this.cTextEdit.Size = new System.Drawing.Size(341, 20);
-            this.cTextEdit.TabIndex = 13;
-            this.cTextEdit.UseWaitCursor = true;
+            this.txtC.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "C", true));
+            this.txtC.Location = new System.Drawing.Point(136, 125);
+            this.txtC.MenuManager = this.barManager1;
+            this.txtC.Name = "txtC";
+            this.txtC.Size = new System.Drawing.Size(341, 20);
+            this.txtC.TabIndex = 13;
             // 
-            // dTextEdit
+            // txtD
             // 
-            this.dTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "D", true));
-            this.dTextEdit.Location = new System.Drawing.Point(531, 125);
-            this.dTextEdit.MenuManager = this.barManager1;
-            this.dTextEdit.Name = "dTextEdit";
-            this.dTextEdit.Size = new System.Drawing.Size(341, 20);
-            this.dTextEdit.TabIndex = 15;
-            this.dTextEdit.UseWaitCursor = true;
+            this.txtD.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "D", true));
+            this.txtD.Location = new System.Drawing.Point(531, 125);
+            this.txtD.MenuManager = this.barManager1;
+            this.txtD.Name = "txtD";
+            this.txtD.Size = new System.Drawing.Size(341, 20);
+            this.txtD.TabIndex = 15;
             // 
-            // dAP_ANTextEdit
+            // txtDapan
             // 
-            this.dAP_ANTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "DAP_AN", true));
-            this.dAP_ANTextEdit.Location = new System.Drawing.Point(136, 157);
-            this.dAP_ANTextEdit.MenuManager = this.barManager1;
-            this.dAP_ANTextEdit.Name = "dAP_ANTextEdit";
-            this.dAP_ANTextEdit.Size = new System.Drawing.Size(117, 20);
-            this.dAP_ANTextEdit.TabIndex = 17;
-            this.dAP_ANTextEdit.UseWaitCursor = true;
+            this.txtDapan.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "DAP_AN", true));
+            this.txtDapan.Location = new System.Drawing.Point(136, 157);
+            this.txtDapan.MenuManager = this.barManager1;
+            this.txtDapan.Name = "txtDapan";
+            this.txtDapan.Size = new System.Drawing.Size(117, 20);
+            this.txtDapan.TabIndex = 17;
             // 
-            // mAGVTextEdit
+            // txtMAGV
             // 
-            this.mAGVTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "MAGV", true));
-            this.mAGVTextEdit.Location = new System.Drawing.Point(768, 37);
-            this.mAGVTextEdit.MenuManager = this.barManager1;
-            this.mAGVTextEdit.Name = "mAGVTextEdit";
-            this.mAGVTextEdit.Size = new System.Drawing.Size(104, 20);
-            this.mAGVTextEdit.TabIndex = 19;
-            this.mAGVTextEdit.UseWaitCursor = true;
+            this.txtMAGV.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "MAGV", true));
+            this.txtMAGV.Enabled = false;
+            this.txtMAGV.Location = new System.Drawing.Point(768, 37);
+            this.txtMAGV.MenuManager = this.barManager1;
+            this.txtMAGV.Name = "txtMAGV";
+            this.txtMAGV.Size = new System.Drawing.Size(104, 20);
+            this.txtMAGV.TabIndex = 19;
+            // 
+            // bdsMonhoc
+            // 
+            this.bdsMonhoc.DataMember = "MONHOC";
+            this.bdsMonhoc.DataSource = this.DS;
+            // 
+            // taMonhoc
+            // 
+            this.taMonhoc.ClearBeforeFill = true;
             // 
             // frmBode
             // 
@@ -637,16 +653,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mAMHTextEdit.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cAUHOISpinEdit.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tRINHDOTextEdit.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nOIDUNGTextEdit.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.aTextEdit.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bTextEdit.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cTextEdit.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dTextEdit.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dAP_ANTextEdit.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mAGVTextEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.spnCauhoi.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTrinhdo.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtNoidung.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtA.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtB.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtC.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtD.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtDapan.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMAGV.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bdsMonhoc)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -682,17 +698,19 @@
         private DevExpress.XtraGrid.Columns.GridColumn colDAP_AN;
         private DevExpress.XtraGrid.Columns.GridColumn colMAGV;
         private System.Windows.Forms.GroupBox groupBox1;
-        private DevExpress.XtraEditors.TextEdit mAMHTextEdit;
-        private DevExpress.XtraEditors.SpinEdit cAUHOISpinEdit;
-        private DevExpress.XtraEditors.TextEdit tRINHDOTextEdit;
-        private DevExpress.XtraEditors.TextEdit nOIDUNGTextEdit;
-        private DevExpress.XtraEditors.TextEdit aTextEdit;
-        private DevExpress.XtraEditors.TextEdit bTextEdit;
-        private DevExpress.XtraEditors.TextEdit cTextEdit;
-        private DevExpress.XtraEditors.TextEdit dTextEdit;
-        private DevExpress.XtraEditors.TextEdit dAP_ANTextEdit;
-        private DevExpress.XtraEditors.TextEdit mAGVTextEdit;
+        private DevExpress.XtraEditors.SpinEdit spnCauhoi;
+        private DevExpress.XtraEditors.TextEdit txtTrinhdo;
+        private DevExpress.XtraEditors.TextEdit txtNoidung;
+        private DevExpress.XtraEditors.TextEdit txtA;
+        private DevExpress.XtraEditors.TextEdit txtB;
+        private DevExpress.XtraEditors.TextEdit txtC;
+        private DevExpress.XtraEditors.TextEdit txtD;
+        private DevExpress.XtraEditors.TextEdit txtDapan;
+        private DevExpress.XtraEditors.TextEdit txtMAGV;
         private DevExpress.XtraEditors.SimpleButton btnHuy;
         private DevExpress.XtraEditors.SimpleButton btnGhi;
+        private System.Windows.Forms.ComboBox cmbMAMH;
+        private System.Windows.Forms.BindingSource bdsMonhoc;
+        private DSTableAdapters.MONHOCTableAdapter taMonhoc;
     }
 }

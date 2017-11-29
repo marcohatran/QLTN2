@@ -67,11 +67,11 @@
             this.colDAP_AN = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colMAGV = new DevExpress.XtraGrid.Columns.GridColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cmbTrinhdo = new System.Windows.Forms.ComboBox();
             this.cmbMAMH = new System.Windows.Forms.ComboBox();
             this.btnHuy = new DevExpress.XtraEditors.SimpleButton();
             this.btnGhi = new DevExpress.XtraEditors.SimpleButton();
             this.spnCauhoi = new DevExpress.XtraEditors.SpinEdit();
-            this.txtTrinhdo = new DevExpress.XtraEditors.TextEdit();
             this.txtNoidung = new DevExpress.XtraEditors.TextEdit();
             this.txtA = new DevExpress.XtraEditors.TextEdit();
             this.txtB = new DevExpress.XtraEditors.TextEdit();
@@ -98,7 +98,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.spnCauhoi.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtTrinhdo.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtNoidung.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtA.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtB.Properties)).BeginInit();
@@ -284,7 +283,7 @@
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
-            this.barDockControlTop.Size = new System.Drawing.Size(951, 22);
+            this.barDockControlTop.Size = new System.Drawing.Size(969, 22);
             // 
             // barDockControlBottom
             // 
@@ -292,7 +291,7 @@
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.barDockControlBottom.Location = new System.Drawing.Point(0, 556);
             this.barDockControlBottom.Manager = this.barManager1;
-            this.barDockControlBottom.Size = new System.Drawing.Size(951, 0);
+            this.barDockControlBottom.Size = new System.Drawing.Size(969, 0);
             // 
             // barDockControlLeft
             // 
@@ -306,7 +305,7 @@
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(951, 22);
+            this.barDockControlRight.Location = new System.Drawing.Point(969, 22);
             this.barDockControlRight.Manager = this.barManager1;
             this.barDockControlRight.Size = new System.Drawing.Size(0, 534);
             // 
@@ -347,7 +346,7 @@
             this.bODEGridControl.MainView = this.gridView1;
             this.bODEGridControl.MenuManager = this.barManager1;
             this.bODEGridControl.Name = "bODEGridControl";
-            this.bODEGridControl.Size = new System.Drawing.Size(951, 214);
+            this.bODEGridControl.Size = new System.Drawing.Size(969, 214);
             this.bODEGridControl.TabIndex = 5;
             this.bODEGridControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
@@ -465,6 +464,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.cmbTrinhdo);
             this.groupBox1.Controls.Add(this.cmbMAMH);
             this.groupBox1.Controls.Add(this.btnHuy);
             this.groupBox1.Controls.Add(this.btnGhi);
@@ -472,7 +472,6 @@
             this.groupBox1.Controls.Add(cAUHOILabel);
             this.groupBox1.Controls.Add(this.spnCauhoi);
             this.groupBox1.Controls.Add(tRINHDOLabel);
-            this.groupBox1.Controls.Add(this.txtTrinhdo);
             this.groupBox1.Controls.Add(nOIDUNGLabel);
             this.groupBox1.Controls.Add(this.txtNoidung);
             this.groupBox1.Controls.Add(aLabel);
@@ -492,9 +491,19 @@
             this.groupBox1.Enabled = false;
             this.groupBox1.Location = new System.Drawing.Point(0, 236);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(951, 320);
+            this.groupBox1.Size = new System.Drawing.Size(969, 320);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
+            // 
+            // cmbTrinhdo
+            // 
+            this.cmbTrinhdo.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bdsBode, "TRINHDO", true));
+            this.cmbTrinhdo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTrinhdo.FormattingEnabled = true;
+            this.cmbTrinhdo.Location = new System.Drawing.Point(531, 30);
+            this.cmbTrinhdo.Name = "cmbTrinhdo";
+            this.cmbTrinhdo.Size = new System.Drawing.Size(121, 25);
+            this.cmbTrinhdo.TabIndex = 25;
             // 
             // cmbMAMH
             // 
@@ -546,15 +555,6 @@
             this.spnCauhoi.Size = new System.Drawing.Size(124, 20);
             this.spnCauhoi.TabIndex = 3;
             // 
-            // txtTrinhdo
-            // 
-            this.txtTrinhdo.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "TRINHDO", true));
-            this.txtTrinhdo.Location = new System.Drawing.Point(531, 35);
-            this.txtTrinhdo.MenuManager = this.barManager1;
-            this.txtTrinhdo.Name = "txtTrinhdo";
-            this.txtTrinhdo.Size = new System.Drawing.Size(132, 20);
-            this.txtTrinhdo.TabIndex = 5;
-            // 
             // txtNoidung
             // 
             this.txtNoidung.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsBode, "NOIDUNG", true));
@@ -570,7 +570,6 @@
             this.txtA.Location = new System.Drawing.Point(136, 94);
             this.txtA.MenuManager = this.barManager1;
             this.txtA.Name = "txtA";
-            this.txtA.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.DateTime;
             this.txtA.Size = new System.Drawing.Size(341, 20);
             this.txtA.TabIndex = 9;
             // 
@@ -633,7 +632,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(951, 556);
+            this.ClientSize = new System.Drawing.Size(969, 556);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.bODEGridControl);
             this.Controls.Add(this.barDockControlLeft);
@@ -654,7 +653,6 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.spnCauhoi.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtTrinhdo.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtNoidung.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtA.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtB.Properties)).EndInit();
@@ -699,7 +697,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn colMAGV;
         private System.Windows.Forms.GroupBox groupBox1;
         private DevExpress.XtraEditors.SpinEdit spnCauhoi;
-        private DevExpress.XtraEditors.TextEdit txtTrinhdo;
         private DevExpress.XtraEditors.TextEdit txtNoidung;
         private DevExpress.XtraEditors.TextEdit txtA;
         private DevExpress.XtraEditors.TextEdit txtB;
@@ -712,5 +709,6 @@
         private System.Windows.Forms.ComboBox cmbMAMH;
         private System.Windows.Forms.BindingSource bdsMonhoc;
         private DSTableAdapters.MONHOCTableAdapter taMonhoc;
+        private System.Windows.Forms.ComboBox cmbTrinhdo;
     }
 }

@@ -208,7 +208,8 @@ namespace QLTN2
 
         private void btnBack_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            if (txtMAGV.Text.Trim() != cMAGV || txtHo.Text.Trim() != cHo || txtTen.Text.Trim() != cTen || txtHV.Text.Trim() != cHV || cmbMAKH.SelectedValue.ToString().Trim() != cMAKH)
+            if (cMAGV !=null &&(txtMAGV.Text.Trim() != cMAGV || txtHo.Text.Trim() != cHo || txtTen.Text.Trim() != cTen 
+                || txtHV.Text.Trim() != cHV || cmbMAKH.SelectedValue.ToString().Trim() != cMAKH))
             {
                 DialogResult rs = MessageBox.Show("Bạn có chắc muốn bỏ thông tin đang cập nhật ??\nNếu có dữ liệu sẽ khôi phục lại ban đầu", "Cảnh báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (rs == DialogResult.No)

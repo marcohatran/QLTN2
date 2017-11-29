@@ -19,7 +19,8 @@ namespace QLTN2
         private Boolean isThem = false, isSua = false, isLoi = false;
         private DataRowView drv;
         private ViewColumnFilterInfo filterInfo;
-        private String cMAMH,cTD,cND,cA,cB,cC,cD,cDA,cCauhoi;
+        private String cMAMH,cTD,cND,cA,cB,cC,cD,cDA;
+        private int cCauhoi;
 
         public frmBode()
         {
@@ -28,6 +29,7 @@ namespace QLTN2
 
         private void frmBode_Load(object sender, EventArgs e)
         {
+            // TODO: This line of code loads data into the 'DS.GIAOVIEN_DANGKY' table. You can move, or remove it, as needed.
             taMonhoc.Connection.ConnectionString += ";password=123";
             taBode.Connection.ConnectionString += ";password=123";
             // TODO: This line of code loads data into the 'DS.MONHOC' table. You can move, or remove it, as needed.
@@ -35,14 +37,12 @@ namespace QLTN2
             this.taMonhoc.Fill(this.DS.MONHOC);
             cmbMAMH.DataSource = bdsMonhoc;
             cmbMAMH.DisplayMember = cmbMAMH.ValueMember = "MAMH";
-            String strFilter = "[MAGV] = '" + Program.username + "'";
+            String strFilter = "Contains([MAGV], '"+Program.username+"')";
             filterInfo = new ViewColumnFilterInfo(gridView1.Columns["MAGV"], new ColumnFilterInfo(strFilter));
             spnCauhoi.Properties.MinValue = 1;
             spnCauhoi.Properties.MaxValue = 999999;
             // TODO: This line of code loads data into the 'dS.BODE' table. You can move, or remove it, as needed.
-
-
-
+            cmbTrinhdo.Items.AddRange(Program.strTrinhdo);
         }
 
 
@@ -56,14 +56,17 @@ namespace QLTN2
             btnBack.Enabled = true;
             cmbMAMH.SelectedIndex = 0;
             cMAMH = cmbMAMH.SelectedValue.ToString();
-            cTD = cND = cA = cB = cC = cD = cDA = "";
+            cND = cA = cB = cC = cD = cDA = "";
+            cTD = cmbTrinhdo.Items[0].ToString();
             them();
         }
 
         private void btnSua_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            gridView1.ActiveFilter.Clear();
             gridView1.ActiveFilter.Add(filterInfo);
             colMAGV.OptionsFilter.AllowFilter = false;
+            
             isSua = true;
             btnBack.Enabled = true;
             btnXoa.Enabled = btnSua.Enabled = btnThem.Enabled = false;
@@ -89,8 +92,8 @@ namespace QLTN2
         private void them()
         {
             bdsBode.AddNew();
-            cCauhoi = ((DataRowView)bdsBode[bdsBode.Count - 2])["CAUHOI"].ToString();
-            spnCauhoi.Value = Int32.Parse(cCauhoi) + 1;
+            cCauhoi = Int32.Parse(((DataRowView)bdsBode[bdsBode.Count - 2])["CAUHOI"].ToString()) + 1;
+            spnCauhoi.Value = cCauhoi;
             drv = (DataRowView)bdsBode[bdsBode.Count - 1];
             txtMAGV.Text = Program.username;
             cmbMAMH.Focus();
@@ -106,10 +109,10 @@ namespace QLTN2
             cC = drv["C"].ToString().Trim();
             cD = drv["D"].ToString().Trim();
             cDA = drv["DAP_AN"].ToString().Trim();
-            cCauhoi = spnCauhoi.Value.ToString();
+            cCauhoi = int.Parse(drv["CAUHOI"].ToString().Trim());
             bODEGridControl.Enabled = false;
             groupBox1.Enabled = true;
-            cMAMH = cmbMAMH.SelectedValue.ToString();
+            cMAMH = drv["MAMH"].ToString().Trim();
         }
 
         private void gridView1_RowClick(object sender, DevExpress.XtraGrid.Views.Grid.RowClickEventArgs e)
@@ -127,15 +130,22 @@ namespace QLTN2
         private void btnBack_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             String a = cTD + " " + cND + " " + cA + " " + cB + " " + cC + " " + cD;
-            if (spnCauhoi.Text.Trim() != cCauhoi.ToString() || txtDapan.Text.Trim() != cDA ||
-                txtTrinhdo.Text.Trim() != cTD || txtNoidung.Text.Trim() != cND || txtA.Text.Trim() != cA || txtB.Text.Trim() != cB ||
-                 txtC.Text.Trim() != cC || txtD.Text.Trim() != cD || cmbMAMH.SelectedValue.ToString() != cMAMH)
+            try
             {
-                DialogResult rs = MessageBox.Show("Bạn có chắc muốn bỏ thông tin đang cập nhật ??\nNếu có dữ liệu sẽ khôi phục lại ban đầu", "Cảnh báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (rs == DialogResult.No)
-                    return;
+                if (cTD !=null && (spnCauhoi.Value != cCauhoi || txtDapan.Text.Trim() != cDA ||
+                    cmbTrinhdo.SelectedItem.ToString() != cTD || txtNoidung.Text.Trim() != cND || txtA.Text.Trim() != cA || txtB.Text.Trim() != cB ||
+                     txtC.Text.Trim() != cC || txtD.Text.Trim() != cD || cmbMAMH.SelectedValue.ToString() != cMAMH))
+                {
+                    DialogResult rs = MessageBox.Show("Bạn có chắc muốn bỏ thông tin đang cập nhật ??\nNếu có dữ liệu sẽ khôi phục lại ban đầu", "Cảnh báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (rs == DialogResult.No)
+                        return;
+                }
+                hoiPhuc();
             }
-            hoiPhuc();
+            catch
+            {
+
+            }
             bdsBode.Position = current;
             bODEGridControl.Enabled = true;
             isThem = isSua = groupBox1.Enabled = btnBack.Enabled = false;
@@ -146,12 +156,6 @@ namespace QLTN2
 
         private void btnGhi_Click(object sender, EventArgs e)
         {
-            if (txtTrinhdo.Text == "")
-            {
-                //lbKiemtra.Text = "Mã môn học không được để trống.";
-                txtMAGV.Focus();
-                return;
-            }
             if (txtNoidung.Text == "")
             {
                 //lbKiemtra.Text = "Tên môn học không được để trống.";
@@ -191,9 +195,9 @@ namespace QLTN2
         {
             if (isThem)
             {
-                txtTrinhdo.Text = txtNoidung.Text = txtA.Text = txtB.Text = txtC.Text = txtD.Text = txtDapan.Text = "";
+                txtNoidung.Text = txtA.Text = txtB.Text = txtC.Text = txtD.Text = txtDapan.Text = "";
                 spnCauhoi.Text = cCauhoi.ToString(); 
-                cmbMAMH.SelectedIndex = 0;
+                cmbTrinhdo.SelectedIndex= cmbMAMH.SelectedIndex = 0;
             }
             else
             {
@@ -209,7 +213,7 @@ namespace QLTN2
                 if (isLoi)
                 {
                     cmbMAMH.SelectedValue = cMAMH;
-                    txtTrinhdo.Text = drv["TRINHDO"].ToString().Trim();
+                    cmbTrinhdo.SelectedValue = cTD;
                     spnCauhoi.Text = drv["CAUHOI"].ToString().Trim();
                     txtNoidung.Text = drv["NOIDUNG"].ToString().Trim();
                     txtA.Text = drv["A"].ToString().Trim();

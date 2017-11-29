@@ -23,8 +23,8 @@ namespace QLTN2
             BonusSkins.Register();
             SkinManager.EnableFormSkins();
             frmChinh = new frmMain();
+            Application.Run(new frmDKThi());
             //Application.Run(frmChinh);
-            Application.Run(frmChinh);
         }
         public static SqlConnection conn = new SqlConnection();
         public static String connstr;
@@ -42,6 +42,7 @@ namespace QLTN2
         public static String mpassword = "";
         public static int mCoso = -1;
 
+        public static String [] strTrinhdo = {"A","B","C"};
         public static BindingSource bds_dspm;
         public static frmMain frmChinh;
 

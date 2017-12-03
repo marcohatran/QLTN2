@@ -54,10 +54,10 @@ namespace QLTN2
             isThem = true;
             bODEGridControl.Enabled = false;
             btnBack.Enabled = true;
-            cmbMAMH.SelectedIndex = 0;
+            cmbMAMH.SelectedIndex = cmbTrinhdo.SelectedIndex = 0;
             cMAMH = cmbMAMH.SelectedValue.ToString();
             cND = cA = cB = cC = cD = cDA = "";
-            cTD = cmbTrinhdo.Items[0].ToString();
+            cTD = cmbTrinhdo.SelectedItem.ToString();
             them();
         }
 

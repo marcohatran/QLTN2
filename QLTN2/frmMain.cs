@@ -120,5 +120,17 @@ namespace QLTN2
                 f.Show();
             }
         }
+
+        private void barButtonItem6_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            Form f = this.CheckExists(typeof(frmDKThi));
+            if (f != null) f.Activate();
+            else
+            {
+                f = new frmDKThi();
+                f.MdiParent = this;
+                f.Show();
+            }
+        }
     }
 }

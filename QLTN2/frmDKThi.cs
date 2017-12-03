@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,6 @@ namespace QLTN2
         private DataRowView drv;
         private DateTime minDate;
         private ViewColumnFilterInfo filterInfo;
-
         public frmDKThi()
         {
             InitializeComponent();
@@ -56,22 +56,92 @@ namespace QLTN2
             String strFilter = "Contains([MAGV], '" + Program.username + "')";
             filterInfo = new ViewColumnFilterInfo(gridView1.Columns["MAGV"], new ColumnFilterInfo(strFilter));
             minDate = DateTime.Now;
+            if(Program.mGroup == "TRUONG")
+            {
+                btnBack.Enabled = btnThem.Enabled = btnSua.Enabled = false;
+                cmbCS.Enabled = true;
+                return;
+            }
+            if(Program.mGroup == "COSO") {
+                btnXoa.Enabled = true;
+            }
 
         }
 
         private void btnThem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             current = bdsGVDK.Position;
-            cTRINHDO = "";
-            cmbMALOP.SelectedIndex = cmbMAMH.SelectedIndex = 0;
+            cmbTrinhdo.SelectedIndex = cmbMALOP.SelectedIndex = cmbMAMH.SelectedIndex  = 0;
+            cTRINHDO = cmbTrinhdo.SelectedItem.ToString();
             cMAMH = cmbMAMH.SelectedValue.ToString();
             cMALOP = cmbMALOP.SelectedValue.ToString();
             cLan = spnLan.Properties.MinValue;
             cTG = spnTG.Properties.MinValue;
             cSCT = spnSCT.Properties.MinValue;
+            cNT = minDate;
             gIAOVIEN_DANGKYGridControl.Enabled = false;
             groupBox1.Enabled = isThem = true;
             them();
+        }
+
+        private void btnLammoi_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            this.taGVDK.Fill(this.DS.GIAOVIEN_DANGKY);
+        }
+
+        private void btnLuu_Click(object sender, EventArgs e)
+        {
+            if (deNT.DateTime.Date < minDate.Date)
+            {
+                MessageBox.Show("Ngày thi không hợp lệ !!");
+                return;
+            }
+            try
+            {
+                bdsGVDK.EndEdit();
+                taGVDK.Update(DS.GIAOVIEN_DANGKY);
+                bdsGVDK.ResetCurrentItem();
+            }
+            catch (Exception ex)
+            {
+                SqlException sqle = (SqlException)ex;
+                if (sqle.Number == 2627)
+                    MessageBox.Show("mã môn học hoặc tên môn học bận cập nhật đã tồn tại.\n Xin kiểm tra lại", "Phi phạm ràng buộc", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                    MessageBox.Show(ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                isLoi = true;
+                return;
+            }
+            if (isThem)
+            {
+                them();
+                return;
+            }
+            if (isSua)
+            {
+                gIAOVIEN_DANGKYGridControl.Enabled = true;
+                groupBox1.Enabled = false;
+            }
+
+
+        }
+
+        private void btnHuy_Click(object sender, EventArgs e)
+        {
+            if (isThem)
+            {
+                spnLan.Value = cLan;
+                spnSCT.Value = cSCT;
+                spnTG.Value = cTG;
+                deNT.DateTime = cNT;
+                cmbTrinhdo.SelectedItem = cmbMAMH.SelectedIndex =cmbMALOP.SelectedIndex = 0;
+            }
+            else
+            {
+                hoiPhuc();
+                gIAOVIEN_DANGKYGridControl.Enabled = true;
+                groupBox1.Enabled = false;
+            }
         }
 
         private void btnSua_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -83,6 +153,8 @@ namespace QLTN2
             isSua = true;
             btnBack.Enabled = true;
             btnXoa.Enabled = btnSua.Enabled = btnThem.Enabled = false;
+            if(Program.mGroup == "GIANGVIEN")
+                cmbMALOP.Enabled = cmbMAMH.Enabled = cmbTrinhdo.Enabled = false;
         }
 
         private void btnBack_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -106,7 +178,8 @@ namespace QLTN2
                 gridView1.ActiveFilter.Clear();
                 colMAGV.OptionsFilter.AllowFilter = true;
             }
-            deNT.Properties.MinValue = minDate;
+            if (Program.mGroup == "GIANGVIEN")
+                cmbMALOP.Enabled = cmbMAMH.Enabled = cmbTrinhdo.Enabled = true;
             gIAOVIEN_DANGKYGridControl.Enabled = true;
             isThem = isSua = groupBox1.Enabled = btnBack.Enabled = false;
             btnSua.Enabled = btnXoa.Enabled = btnThem.Enabled = btnLammoi.Enabled = true;

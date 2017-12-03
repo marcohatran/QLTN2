@@ -37,6 +37,7 @@
             System.Windows.Forms.Label mALOPLabel;
             System.Windows.Forms.Label mAMHLabel;
             System.Windows.Forms.Label tRINHDOLabel1;
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode2 = new DevExpress.XtraGrid.GridLevelNode();
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar2 = new DevExpress.XtraBars.Bar();
             this.btnBack = new DevExpress.XtraBars.BarButtonItem();
@@ -238,6 +239,7 @@
             // btnXoa
             // 
             this.btnXoa.Caption = "Xóa";
+            this.btnXoa.Enabled = false;
             this.btnXoa.Id = 2;
             this.btnXoa.Name = "btnXoa";
             // 
@@ -246,6 +248,7 @@
             this.btnLammoi.Caption = "Làm mới";
             this.btnLammoi.Id = 3;
             this.btnLammoi.Name = "btnLammoi";
+            this.btnLammoi.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnLammoi_ItemClick);
             // 
             // bar3
             // 
@@ -352,6 +355,9 @@
             // 
             this.gIAOVIEN_DANGKYGridControl.DataSource = this.bdsGVDK;
             this.gIAOVIEN_DANGKYGridControl.Dock = System.Windows.Forms.DockStyle.Top;
+            gridLevelNode2.RelationName = "Level1";
+            this.gIAOVIEN_DANGKYGridControl.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
+            gridLevelNode2});
             this.gIAOVIEN_DANGKYGridControl.Location = new System.Drawing.Point(0, 76);
             this.gIAOVIEN_DANGKYGridControl.MainView = this.gridView1;
             this.gIAOVIEN_DANGKYGridControl.MenuManager = this.barManager1;
@@ -413,7 +419,7 @@
             // colNGAYTHI
             // 
             this.colNGAYTHI.Caption = "Ngày thi";
-            this.colNGAYTHI.DisplayFormat.FormatString = "g";
+            this.colNGAYTHI.DisplayFormat.FormatString = "d";
             this.colNGAYTHI.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.colNGAYTHI.FieldName = "NGAYTHI";
             this.colNGAYTHI.Name = "colNGAYTHI";
@@ -465,6 +471,7 @@
             this.groupBox1.Controls.Add(tHOIGIANLabel);
             this.groupBox1.Controls.Add(this.spnTG);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox1.Enabled = false;
             this.groupBox1.Location = new System.Drawing.Point(0, 293);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(1184, 234);
@@ -478,6 +485,7 @@
             this.btnHuy.Size = new System.Drawing.Size(125, 23);
             this.btnHuy.TabIndex = 13;
             this.btnHuy.Text = "Hủy";
+            this.btnHuy.Click += new System.EventHandler(this.btnHuy_Click);
             // 
             // btnLuu
             // 
@@ -486,6 +494,7 @@
             this.btnLuu.Size = new System.Drawing.Size(125, 23);
             this.btnLuu.TabIndex = 12;
             this.btnLuu.Text = "Ghi";
+            this.btnLuu.Click += new System.EventHandler(this.btnLuu_Click);
             // 
             // cmbTrinhdo
             // 
@@ -537,11 +546,6 @@
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.deNT.Properties.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.deNT.Properties.DisplayFormat.FormatString = "g";
-            this.deNT.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
-            this.deNT.Properties.EditFormat.FormatString = "g";
-            this.deNT.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
-            this.deNT.Properties.Mask.EditMask = "g";
             this.deNT.Size = new System.Drawing.Size(183, 20);
             this.deNT.TabIndex = 9;
             // 

@@ -23,8 +23,8 @@ namespace QLTN2
             BonusSkins.Register();
             SkinManager.EnableFormSkins();
             frmChinh = new frmMain();
-            //Application.Run(new frmDKThi());
-            Application.Run(frmChinh);
+            Application.Run(new frmThi());
+            //Application.Run(frmChinh);
         }
         public static SqlConnection conn = new SqlConnection();
         public static String connstr;

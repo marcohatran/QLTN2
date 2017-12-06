@@ -312,6 +312,7 @@
             this.cmbCS.Name = "cmbCS";
             this.cmbCS.Size = new System.Drawing.Size(273, 25);
             this.cmbCS.TabIndex = 1;
+            this.cmbCS.SelectedIndexChanged += new System.EventHandler(this.cmbCS_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -340,6 +341,7 @@
             // tableAdapterManager
             // 
             this.tableAdapterManager.BackupDataSetBeforeUpdate = false;
+            this.tableAdapterManager.BAITHITableAdapter = null;
             this.tableAdapterManager.BANGDIEMTableAdapter = null;
             this.tableAdapterManager.BODETableAdapter = null;
             this.tableAdapterManager.COSOTableAdapter = null;
@@ -529,6 +531,7 @@
             // txtMAGV
             // 
             this.txtMAGV.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsGVDK, "MAGV", true));
+            this.txtMAGV.Enabled = false;
             this.txtMAGV.Location = new System.Drawing.Point(141, 29);
             this.txtMAGV.MenuManager = this.barManager1;
             this.txtMAGV.Name = "txtMAGV";
@@ -562,6 +565,7 @@
             this.spnLan.Name = "spnLan";
             this.spnLan.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.spnLan.Properties.Mask.EditMask = "f0";
             this.spnLan.Properties.MaxValue = new decimal(new int[] {
             10,
             0,
@@ -579,7 +583,7 @@
             // 
             this.spnSCT.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsGVDK, "SOCAUTHI", true));
             this.spnSCT.EditValue = new decimal(new int[] {
-            1,
+            10,
             0,
             0,
             0});
@@ -588,13 +592,14 @@
             this.spnSCT.Name = "spnSCT";
             this.spnSCT.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.spnSCT.Properties.Mask.EditMask = "f0";
             this.spnSCT.Properties.MaxValue = new decimal(new int[] {
-            999,
+            100,
             0,
             0,
             0});
             this.spnSCT.Properties.MinValue = new decimal(new int[] {
-            1,
+            10,
             0,
             0,
             0});
@@ -605,7 +610,7 @@
             // 
             this.spnTG.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.bdsGVDK, "THOIGIAN", true));
             this.spnTG.EditValue = new decimal(new int[] {
-            10,
+            15,
             0,
             0,
             0});
@@ -614,13 +619,14 @@
             this.spnTG.Name = "spnTG";
             this.spnTG.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.spnTG.Properties.Mask.EditMask = "f0";
             this.spnTG.Properties.MaxValue = new decimal(new int[] {
-            999,
+            60,
             0,
             0,
             0});
             this.spnTG.Properties.MinValue = new decimal(new int[] {
-            10,
+            15,
             0,
             0,
             0});

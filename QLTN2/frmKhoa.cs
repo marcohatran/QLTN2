@@ -151,7 +151,6 @@ namespace QLTN2
                 txtMAKH.Focus();
                 return;
             }
-        
             String strLenh = "Exec dbo.SP_kiemtra_khoa '" + txtMAKH.Text.Trim() + "', N'" + txtTENKH.Text.Trim() + "'";
             SqlDataReader myReader;
             myReader = Program.ExecSqlDataReader(strLenh);
@@ -159,7 +158,6 @@ namespace QLTN2
             myReader.Read();
             int ret = myReader.GetInt32(0);
             myReader.Close();
-            Program.conn.Close();
             if (ret == 1)
             {
                 MessageBox.Show("Mã khoa hoặc tên khoa đã tồn tại.\nXin kiểm tra lại", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);

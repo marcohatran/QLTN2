@@ -33,7 +33,7 @@ namespace QLTN2
         private void frmDKThi_Load(object sender, EventArgs e)
         {
             // TODO: This line of code loads data into the 'DS.MONHOC' table. You can move, or remove it, as needed.
-            taGVDK.Connection.ConnectionString += ";password=123";
+            taGVDK.Connection.ConnectionString = Program.connstr;
             taLop.Connection.ConnectionString = taGVDK.Connection.ConnectionString;
             taMH.Connection.ConnectionString = taGVDK.Connection.ConnectionString;
             this.taLop.Fill(this.DS.LOP);
@@ -56,22 +56,22 @@ namespace QLTN2
             String strFilter = "Contains([MAGV], '" + Program.username + "')";
             filterInfo = new ViewColumnFilterInfo(gridView1.Columns["MAGV"], new ColumnFilterInfo(strFilter));
             minDate = DateTime.Now;
-            if(Program.mGroup == "TRUONG")
+            if (Program.mGroup == "TRUONG")
             {
                 btnBack.Enabled = btnThem.Enabled = btnSua.Enabled = false;
                 cmbCS.Enabled = true;
                 return;
             }
-            if(Program.mGroup == "COSO") {
+            if (Program.mGroup == "COSO")
+            {
                 btnXoa.Enabled = true;
             }
 
         }
-
         private void btnThem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             current = bdsGVDK.Position;
-            cmbTrinhdo.SelectedIndex = cmbMALOP.SelectedIndex = cmbMAMH.SelectedIndex  = 0;
+            cmbTrinhdo.SelectedIndex = cmbMALOP.SelectedIndex = cmbMAMH.SelectedIndex = 0;
             cTRINHDO = cmbTrinhdo.SelectedItem.ToString();
             cMAMH = cmbMAMH.SelectedValue.ToString();
             cMALOP = cmbMALOP.SelectedValue.ToString();
@@ -91,11 +91,22 @@ namespace QLTN2
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
-            if (deNT.DateTime.Date < minDate.Date)
+            if (deNT.DateTime >= minDate)
             {
                 MessageBox.Show("Ngày thi không hợp lệ !!");
                 return;
             }
+            String strLenh = "Exec SP_KIEMTRA_SOCAUHOI '" + cmbTrinhdo.SelectedItem.ToString() + "','"
+                + cmbMAMH.SelectedValue.ToString() + "','" + spnSCT.Value + "'";
+            SqlDataReader myReader = Program.ExecSqlDataReader(strLenh);
+            if (myReader == null) { MessageBox.Show("Loi"); return; }
+            myReader.Read();
+            if (myReader.GetInt32(0) == 0)
+            {
+                MessageBox.Show("Số lượng câu hỏi trong bộ đề của môn học này không đủ.\nXin bổ sung thêm trước khi đăng kí","",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                return;
+            }
+
             try
             {
                 bdsGVDK.EndEdit();
@@ -144,12 +155,29 @@ namespace QLTN2
             }
         }
 
+        private void cmbCS_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(cmbCS.SelectedIndex != Program.mCoso)
+            {
+                Program.login = Program.remotelogin;
+                Program.password = Program.remotepassword;
+            }
+            else
+            {
+                Program.login = Program.mlogin;
+                Program.password = Program.mpassword;
+            }
+            if (Program.KetNoi() == 0)
+                return;
+            taGVDK.Connection.ConnectionString = Program.connstr;
+            this.taGVDK.Fill(this.DS.GIAOVIEN_DANGKY);
+        }
+
         private void btnSua_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             gridView1.ActiveFilter.Clear();
             gridView1.ActiveFilter.Add(filterInfo);
             colMAGV.OptionsFilter.AllowFilter = false;
-
             isSua = true;
             btnBack.Enabled = true;
             btnXoa.Enabled = btnSua.Enabled = btnThem.Enabled = false;
@@ -198,6 +226,7 @@ namespace QLTN2
         private void them()
         {
             bdsGVDK.AddNew();
+            cmbTrinhdo.SelectedIndex = cmbMALOP.SelectedIndex = cmbMAMH.SelectedIndex = 0;
             deNT.DateTime = cNT;
             txtMAGV.Text = Program.username;
             spnLan.Value = cLan;

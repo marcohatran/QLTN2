@@ -34,30 +34,7 @@ namespace QLTN2
             f.MdiParent = this;
             f.Show();
         }
-        
-        private void ts_lb1_MouseHover(object sender, EventArgs e)
-        {
-            lbThoat.Font = new Font(lbThoat.Font.Name, lbThoat.Font.SizeInPoints, FontStyle.Underline);
-            this.Cursor = Cursors.Hand;
-        }
 
-        private void ts_lb1_MouseLeave(object sender, EventArgs e)
-        {
-            lbThoat.Font = new Font(lbThoat.Font.Name, lbThoat.Font.SizeInPoints, FontStyle.Regular);
-            this.Cursor = Cursors.Default;
-        }
-
-        private void lbThoat_Click(object sender, EventArgs e)
-        {
-            lbThoat.Visible= false;
-            rbDangnhap.Enabled = true;
-            frmDangnhap f = new frmDangnhap();
-            f.MdiParent = this;
-            f.Show();
-            this.MA.Text = "";
-            this.HOTEN.Text = "";
-            this.NHOM.Text = "";
-        }
 
         private void btnDangnhap_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -143,6 +120,21 @@ namespace QLTN2
                 f.MdiParent = this;
                 f.Show();
             }
+        }
+
+        private void btnDangxuat_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            rbMenu.Visible = rbGV.Visible = rbSV.Visible = false;
+            rb1.Visible = true;
+            rbDangnhap.Enabled = true;
+            btnDangnhap.Enabled = true;
+            btnDangxuat.Enabled = false;
+            frmDangnhap f = new frmDangnhap();
+            f.MdiParent = this;
+            f.Show();
+            this.MA.Text = "";
+            this.HOTEN.Text = "";
+            this.NHOM.Text = "";
         }
     }
 }

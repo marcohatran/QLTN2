@@ -31,6 +31,7 @@
             System.Windows.Forms.Label cOSOLabel;
             System.Windows.Forms.Label label1;
             System.Windows.Forms.Label label2;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDangnhap));
             this.cOSOComboBox = new System.Windows.Forms.ComboBox();
             this.txtTaikhoan = new System.Windows.Forms.TextBox();
             this.txtMatkhau = new System.Windows.Forms.TextBox();
@@ -118,18 +119,20 @@
             // 
             // btnThoat
             // 
+            this.btnThoat.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnThoat.ImageOptions.Image")));
             this.btnThoat.Location = new System.Drawing.Point(239, 172);
             this.btnThoat.Name = "btnThoat";
-            this.btnThoat.Size = new System.Drawing.Size(97, 23);
+            this.btnThoat.Size = new System.Drawing.Size(88, 23);
             this.btnThoat.TabIndex = 10;
             this.btnThoat.Text = "Thoát";
             this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
             // 
             // btnDangnhap
             // 
-            this.btnDangnhap.Location = new System.Drawing.Point(111, 172);
+            this.btnDangnhap.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnDangnhap.ImageOptions.Image")));
+            this.btnDangnhap.Location = new System.Drawing.Point(107, 172);
             this.btnDangnhap.Name = "btnDangnhap";
-            this.btnDangnhap.Size = new System.Drawing.Size(97, 23);
+            this.btnDangnhap.Size = new System.Drawing.Size(88, 23);
             this.btnDangnhap.TabIndex = 9;
             this.btnDangnhap.Text = "Đăng nhập";
             this.btnDangnhap.Click += new System.EventHandler(this.btnDangnhap_Click);

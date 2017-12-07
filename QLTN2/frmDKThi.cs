@@ -55,7 +55,7 @@ namespace QLTN2
 
             String strFilter = "Contains([MAGV], '" + Program.username + "')";
             filterInfo = new ViewColumnFilterInfo(gridView1.Columns["MAGV"], new ColumnFilterInfo(strFilter));
-            minDate = DateTime.Now;
+            minDate = DateTime.Now.Date;
             if (Program.mGroup == "TRUONG")
             {
                 btnBack.Enabled = btnThem.Enabled = btnSua.Enabled = false;

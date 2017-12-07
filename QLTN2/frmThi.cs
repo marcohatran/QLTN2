@@ -23,6 +23,8 @@ namespace QLTN2
         private String mamh;
         private String lan;
         private DateTime NT;
+        int sec = 0, minute = 0;
+
         public frmThi()
         {
             InitializeComponent();
@@ -60,8 +62,6 @@ namespace QLTN2
             }
 
 
-
-            bdsGVDK.Filter = "MALOP =" + "'D14CN1'";
             cmbMAMH.DataSource = bdsGVDK;
             cmbMAMH.DisplayMember = "MAMH";
             cmbMAMH.ValueMember = "MAMH";
@@ -91,38 +91,40 @@ namespace QLTN2
             catch { }
         }
 
-        private void btnThi_Click(object sender, EventArgs e)
+        private void btnChon_Click(object sender, EventArgs e)
         {
-            btnThi.Enabled = false;
-            cmbMAMH.Enabled = false;
-            String trinhdo = drv["TRINHDO"].ToString();
-            String socau = drv["SOCAUTHI"].ToString();
-            socauthi = Convert.ToInt32(socau);
-            spnCau.Properties.MaxValue = socauthi;
-            lbSocau.Text = "/" + socau;
-            String strLenh = "EXEC sp_LAYDE '" + trinhdo + "','" + cmbMAMH.SelectedValue + "','" + socau + "'";
-            tb = Program.ExecSqlDataTable(strLenh);
-            if (tb == null)
-                return;
-            luachon = new int[Convert.ToInt32(socau)];
-            foreach (DataRow dr in tb.Rows)
+            try
             {
-                bdsBaithi.AddNew();
-                if (Program.mGroup == "SINHVIEN")
+                btnChon.Enabled = false;
+                cmbMAMH.Enabled = false;
+                String trinhdo = drv["TRINHDO"].ToString();
+                String socau = drv["SOCAUTHI"].ToString();
+                mamh = cmbMAMH.SelectedValue.ToString();
+                socauthi = Convert.ToInt32(socau);
+                spnCau.Properties.MaxValue = socauthi;
+                lbSocau.Text = "/" + socau;
+                String strLenh = "EXEC sp_LAYDE '" + trinhdo + "','" + cmbMAMH.SelectedValue + "','" + socau + "'";
+                tb = Program.ExecSqlDataTable(strLenh);
+                if (tb == null)
+                    return;
+                luachon = new int[Convert.ToInt32(socau)];
+                foreach (DataRow dr in tb.Rows)
                 {
-                    DataRowView drView = (DataRowView)bdsBaithi.Current;
-                    drView["MASV"] = Program.username;
-                    drView["MACAUHOI"] = dr["CAUHOI"];
-                    drView["LAN"] = lan;
-                    bdsBaithi.EndEdit();
-                    bdsBaithi.ResetCurrentItem();
+                    bdsBaithi.AddNew();
+                    if (Program.mGroup == "SINHVIEN")
+                    {
+                        DataRowView drView = (DataRowView)bdsBaithi.Current;
+                        drView["MASV"] = Program.username;
+                        drView["MACAUHOI"] = dr["CAUHOI"];
+                        drView["LAN"] = lan;
+                        bdsBaithi.EndEdit();
+                        bdsBaithi.ResetCurrentItem();
+                    }
                 }
+                btnChon.Enabled = false;
+                btnThi.Enabled = true;
             }
-            bdsBaithi.Position = 0;
-            current = 0;
-            loadCauhoi();
-            groupBox3.Visible = true;
-            btnPre.Enabled = false;
+            catch { }
         }
 
         private void gridView1_CustomUnboundColumnData(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDataEventArgs e)
@@ -135,7 +137,7 @@ namespace QLTN2
 
         private void loadCauhoi()
         {
-            lbND.Text = tb.Rows[current]["NOIDUNG"].ToString();
+            lbND.Text = "Câu "+(current+1)+" : "+tb.Rows[current]["NOIDUNG"].ToString();
             A.Text = tb.Rows[current]["A"].ToString();
             B.Text = tb.Rows[current]["B"].ToString();
             C.Text = tb.Rows[current]["C"].ToString();
@@ -233,8 +235,15 @@ namespace QLTN2
 
         private void btnNop_Click(object sender, EventArgs e)
         {
+            timer.Stop();
+            nopBai();
+        }
+        private void nopBai()
+        {
+            groupBox3.Enabled = false;
+            btnNop.Enabled = false;
             int socaudung = 0;
-            for(int i =0;i<luachon.Length;i++)
+            for (int i = 0; i < luachon.Length; i++)
             {
                 int chon = luachon[i];
                 if (chon == 0)
@@ -245,11 +254,11 @@ namespace QLTN2
             }
             Double diem = (10.0 / socauthi) * socaudung;
             diem = Math.Round(diem, 2);
-            MessageBox.Show(diem.ToString()+" "+socaudung +"/"+socauthi );
+            MessageBox.Show("Số câu đúng: "+ socaudung + "/" + socauthi +" câu\nBạn được: "+diem +" điểm");
             if (Program.mGroup == "SINHVIEN")
             {
                 taBaithi.Update(DS.BAITHI);
-                taBangdiem.Insert(Program.username, mamh,Convert.ToSByte(lan), NT, diem);
+                taBangdiem.Insert(Program.username, mamh, Convert.ToSByte(lan), NT, diem);
             }
         }
 
@@ -272,6 +281,54 @@ namespace QLTN2
                 }
             }
             catch { }
+        }
+
+        private void btnThi_Click(object sender, EventArgs e)
+        {
+            btnThi.Enabled = false;
+            bdsBaithi.Position = 0;
+            current = 0;
+            loadCauhoi();
+            groupBox3.Visible = true;
+            btnPre.Enabled = false;
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            lbTGThi.Text = fixTime(minute, sec);
+            if (sec != 0)
+            {
+                sec--;
+            }
+            else
+            {
+                sec = 59;
+                minute--;
+            }
+            if (minute == 0 && sec == 0)
+            {
+                timer.Stop();
+                lbTGThi.Text = fixTime(minute, sec);
+                nopBai();
+               
+            }
+        }
+        public static String fixTime(int minute, int sec)
+        {
+            String time = "";
+            String phut = "";
+            String giay = "";
+            if (minute < 9)
+                phut = "0" + minute;
+            else
+                phut = "" + minute;
+            if (sec < 9)
+                giay = "0" + sec;
+            else
+                giay = "" + sec;
+
+            time = phut + " : " + giay;
+            return time;
         }
     }
 }

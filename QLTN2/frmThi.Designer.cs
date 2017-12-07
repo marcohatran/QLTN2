@@ -30,22 +30,23 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label mAMHLabel;
-            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions2 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
+            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions1 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
             this.DS = new QLTN2.DS();
             this.bdsGVDK = new System.Windows.Forms.BindingSource(this.components);
             this.taGVDK = new QLTN2.DSTableAdapters.GIAOVIEN_DANGKYTableAdapter();
             this.tableAdapterManager = new QLTN2.DSTableAdapters.TableAdapterManager();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnThi = new DevExpress.XtraEditors.SimpleButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnNop = new DevExpress.XtraEditors.SimpleButton();
             this.lbTGThi = new System.Windows.Forms.Label();
-            this.btnThi = new DevExpress.XtraEditors.SimpleButton();
+            this.btnChon = new DevExpress.XtraEditors.SimpleButton();
             this.lbMALOP = new System.Windows.Forms.Label();
             this.lbTENLOP = new System.Windows.Forms.Label();
             this.lbLan = new System.Windows.Forms.Label();
             this.cmbMAMH = new System.Windows.Forms.ComboBox();
             this.lbNT = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.bdsBaithi = new System.Windows.Forms.BindingSource(this.components);
             this.taBaithi = new QLTN2.DSTableAdapters.BAITHITableAdapter();
             this.bAITHIGridControl = new DevExpress.XtraGrid.GridControl();
@@ -121,8 +122,9 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.groupBox2);
             this.groupBox1.Controls.Add(this.btnThi);
+            this.groupBox1.Controls.Add(this.groupBox2);
+            this.groupBox1.Controls.Add(this.btnChon);
             this.groupBox1.Controls.Add(this.lbMALOP);
             this.groupBox1.Controls.Add(this.lbTENLOP);
             this.groupBox1.Controls.Add(this.lbLan);
@@ -136,6 +138,16 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Thông tin thi";
+            // 
+            // btnThi
+            // 
+            this.btnThi.Enabled = false;
+            this.btnThi.Location = new System.Drawing.Point(64, 247);
+            this.btnThi.Name = "btnThi";
+            this.btnThi.Size = new System.Drawing.Size(147, 23);
+            this.btnThi.TabIndex = 10;
+            this.btnThi.Text = "Bắt đầu thi";
+            this.btnThi.Click += new System.EventHandler(this.btnThi_Click);
             // 
             // groupBox2
             // 
@@ -167,14 +179,14 @@
             this.lbTGThi.TabIndex = 0;
             this.lbTGThi.Text = "Thời gian :";
             // 
-            // btnThi
+            // btnChon
             // 
-            this.btnThi.Location = new System.Drawing.Point(64, 217);
-            this.btnThi.Name = "btnThi";
-            this.btnThi.Size = new System.Drawing.Size(147, 23);
-            this.btnThi.TabIndex = 8;
-            this.btnThi.Text = "Bắt đầu thi";
-            this.btnThi.Click += new System.EventHandler(this.btnThi_Click);
+            this.btnChon.Location = new System.Drawing.Point(64, 206);
+            this.btnChon.Name = "btnChon";
+            this.btnChon.Size = new System.Drawing.Size(147, 23);
+            this.btnChon.TabIndex = 8;
+            this.btnChon.Text = "Chọn";
+            this.btnChon.Click += new System.EventHandler(this.btnChon_Click);
             // 
             // lbMALOP
             // 
@@ -220,6 +232,10 @@
             this.lbNT.Size = new System.Drawing.Size(58, 17);
             this.lbNT.TabIndex = 4;
             this.lbNT.Text = "Ngày thi";
+            // 
+            // timer
+            // 
+            this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
             // bdsBaithi
             // 
@@ -307,7 +323,7 @@
             // 
             this.lbSocau.AutoSize = true;
             this.lbSocau.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSocau.Location = new System.Drawing.Point(247, 314);
+            this.lbSocau.Location = new System.Drawing.Point(248, 313);
             this.lbSocau.Name = "lbSocau";
             this.lbSocau.Size = new System.Drawing.Size(46, 17);
             this.lbSocau.TabIndex = 10;
@@ -317,7 +333,7 @@
             // 
             this.lbND.AutoSize = true;
             this.lbND.Location = new System.Drawing.Point(43, 33);
-            this.lbND.MaximumSize = new System.Drawing.Size(200, 0);
+            this.lbND.MaximumSize = new System.Drawing.Size(600, 0);
             this.lbND.Name = "lbND";
             this.lbND.Size = new System.Drawing.Size(68, 17);
             this.lbND.TabIndex = 6;
@@ -336,7 +352,7 @@
             // 
             this.D.AutoSize = true;
             this.D.Location = new System.Drawing.Point(44, 229);
-            this.D.MaximumSize = new System.Drawing.Size(400, 0);
+            this.D.MaximumSize = new System.Drawing.Size(600, 0);
             this.D.Name = "D";
             this.D.Size = new System.Drawing.Size(101, 21);
             this.D.TabIndex = 5;
@@ -352,10 +368,10 @@
             0,
             0,
             0});
-            this.spnCau.Location = new System.Drawing.Point(204, 310);
+            this.spnCau.Location = new System.Drawing.Point(205, 309);
             this.spnCau.Name = "spnCau";
             this.spnCau.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, editorButtonImageOptions2)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, editorButtonImageOptions1)});
             this.spnCau.Properties.ButtonsStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.spnCau.Properties.Mask.EditMask = "f0";
             this.spnCau.Size = new System.Drawing.Size(44, 20);
@@ -365,7 +381,7 @@
             // 
             this.C.AutoSize = true;
             this.C.Location = new System.Drawing.Point(44, 179);
-            this.C.MaximumSize = new System.Drawing.Size(400, 0);
+            this.C.MaximumSize = new System.Drawing.Size(600, 0);
             this.C.Name = "C";
             this.C.Size = new System.Drawing.Size(101, 21);
             this.C.TabIndex = 4;
@@ -386,7 +402,7 @@
             // 
             this.B.AutoSize = true;
             this.B.Location = new System.Drawing.Point(44, 129);
-            this.B.MaximumSize = new System.Drawing.Size(400, 0);
+            this.B.MaximumSize = new System.Drawing.Size(600, 0);
             this.B.Name = "B";
             this.B.Size = new System.Drawing.Size(101, 21);
             this.B.TabIndex = 3;
@@ -407,7 +423,7 @@
             // 
             this.A.AutoSize = true;
             this.A.Location = new System.Drawing.Point(44, 79);
-            this.A.MaximumSize = new System.Drawing.Size(400, 0);
+            this.A.MaximumSize = new System.Drawing.Size(600, 0);
             this.A.Name = "A";
             this.A.Size = new System.Drawing.Size(101, 21);
             this.A.TabIndex = 2;
@@ -436,7 +452,7 @@
             this.groupBox3.Size = new System.Drawing.Size(515, 525);
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "groupBox3";
+            this.groupBox3.Text = "Thi";
             this.groupBox3.Visible = false;
             // 
             // frmThi
@@ -481,8 +497,8 @@
         private System.Windows.Forms.Label lbLan;
         private System.Windows.Forms.ComboBox cmbMAMH;
         private System.Windows.Forms.Label lbNT;
-        private System.Windows.Forms.Timer timer1;
-        private DevExpress.XtraEditors.SimpleButton btnThi;
+        private System.Windows.Forms.Timer timer;
+        private DevExpress.XtraEditors.SimpleButton btnChon;
         private System.Windows.Forms.GroupBox groupBox2;
         private DevExpress.XtraEditors.SimpleButton btnNop;
         private System.Windows.Forms.Label lbTGThi;
@@ -507,5 +523,6 @@
         private DevExpress.XtraEditors.SimpleButton btnDau;
         private System.Windows.Forms.RadioButton A;
         private System.Windows.Forms.GroupBox groupBox3;
+        private DevExpress.XtraEditors.SimpleButton btnThi;
     }
 }

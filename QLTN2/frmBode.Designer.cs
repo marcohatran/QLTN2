@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label mAMHLabel;
             System.Windows.Forms.Label cAUHOILabel;
             System.Windows.Forms.Label tRINHDOLabel;
@@ -39,7 +38,7 @@
             System.Windows.Forms.Label dLabel;
             System.Windows.Forms.Label dAP_ANLabel;
             System.Windows.Forms.Label mAGVLabel;
-            this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
+            this.barManager1 = new DevExpress.XtraBars.BarManager();
             this.bar2 = new DevExpress.XtraBars.Bar();
             this.btnBack = new DevExpress.XtraBars.BarButtonItem();
             this.btnThem = new DevExpress.XtraBars.BarButtonItem();
@@ -51,7 +50,7 @@
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
             this.DS = new QLTN2.DS();
-            this.bdsBode = new System.Windows.Forms.BindingSource(this.components);
+            this.bdsBode = new System.Windows.Forms.BindingSource();
             this.taBode = new QLTN2.DSTableAdapters.BODETableAdapter();
             this.tableAdapterManager = new QLTN2.DSTableAdapters.TableAdapterManager();
             this.bODEGridControl = new DevExpress.XtraGrid.GridControl();
@@ -79,7 +78,7 @@
             this.txtD = new DevExpress.XtraEditors.TextEdit();
             this.txtDapan = new DevExpress.XtraEditors.TextEdit();
             this.txtMAGV = new DevExpress.XtraEditors.TextEdit();
-            this.bdsMonhoc = new System.Windows.Forms.BindingSource(this.components);
+            this.bdsMonhoc = new System.Windows.Forms.BindingSource();
             this.taMonhoc = new QLTN2.DSTableAdapters.MONHOCTableAdapter();
             mAMHLabel = new System.Windows.Forms.Label();
             cAUHOILabel = new System.Windows.Forms.Label();
@@ -327,6 +326,7 @@
             // tableAdapterManager
             // 
             this.tableAdapterManager.BackupDataSetBeforeUpdate = false;
+            this.tableAdapterManager.BAITHITableAdapter = null;
             this.tableAdapterManager.BANGDIEMTableAdapter = null;
             this.tableAdapterManager.BODETableAdapter = this.taBode;
             this.tableAdapterManager.COSOTableAdapter = null;
@@ -642,7 +642,7 @@
             this.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmBode";
-            this.Text = "frmBode";
+            this.Text = "Bộ đề";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.frmBode_Load);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();

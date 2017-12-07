@@ -22,7 +22,7 @@ namespace QLTN2
         {
             // TODO: This line of code loads data into the 'qLTNDataSet.v_ds_phanmanh' table. You can move, or remove it, as needed.
             try
-            { 
+            {
                 cOSOComboBox.DataSource = Program.bds_dspm;
                 cOSOComboBox.DisplayMember = "COSO";
                 cOSOComboBox.ValueMember = "TENSERVER";
@@ -70,9 +70,18 @@ namespace QLTN2
             Program.frmChinh.NHOM.Text = "Nhóm : " + Program.mGroup;
             Program.mlogin = Program.login;
             Program.mpassword = Program.password;
-            Program.frmChinh.lbThoat.Visible = true;
             Program.frmChinh.rbDangnhap.Enabled = false;
             Program.mCoso = cOSOComboBox.SelectedIndex;
+            Program.frmChinh.btnDangnhap.Enabled = false;
+            Program.frmChinh.btnDangxuat.Enabled = true;
+            Program.frmChinh.rb1.Visible = false;
+            if (Program.mGroup == "SINHVIEN")
+                Program.frmChinh.rbSV.Visible = true;
+            else
+                if (Program.mGroup == "GIAOVIEN")
+                    Program.frmChinh.rbGV.Visible = true;
+                else
+                    Program.frmChinh.rbMenu.Visible = true;
             Close();
 
         }

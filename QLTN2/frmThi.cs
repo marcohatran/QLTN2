@@ -24,6 +24,7 @@ namespace QLTN2
         private String lan;
         private DateTime NT;
         int sec = 0, minute = 0;
+        private Boolean thi = false;
 
         public frmThi()
         {
@@ -38,11 +39,13 @@ namespace QLTN2
             // TODO: This line of code loads data into the 'DS.BAITHI' table. You can move, or remove it, as needed.
             // TODO: This line of code loads data into the 'dS.GIAOVIEN_DANGKY' table. You can move, or remove it, as needed.
             taGVDK.Connection.ConnectionString = Program.connstr;
-            taBaithi.Connection.ConnectionString =taBangdiem.Connection.ConnectionString = taGVDK.Connection.ConnectionString ;
+            taBangdiem.Connection.ConnectionString = Program.connstr;
+            taBaithi.Connection.ConnectionString = Program.connstr;
 
             this.taGVDK.Fill(this.DS.GIAOVIEN_DANGKY);
+            bAITHIGridControl.DataSource = null;
             this.taBaithi.Fill(this.DS.BAITHI);
-            if(Program.mGroup == "SINHVIEN")
+            if (Program.mGroup == "SINHVIEN")
             {
                 String strLenh = "Exec SP_LAY_LOP '" + Program.username + "'";
                 SqlDataReader myReader = Program.ExecSqlDataReader(strLenh);
@@ -50,10 +53,18 @@ namespace QLTN2
                 myReader.Read();
                 String MALOP = myReader.GetString(0);
                 String TENLOP = myReader.GetString(1);
-                lbMALOP.Text = MALOP;
-                lbTENLOP.Text = TENLOP;
-                bdsGVDK.Filter = "MALOP ='" +MALOP+ "'";
-                //bdsGVDK.Filter = "MALOP ='" + MALOP + "' And Is today([NGAYTHI])";
+                lbMALOP.Text = "Mã lớp: " + MALOP;
+                lbTENLOP.Text = "Tên lớp: " +TENLOP;
+                //bdsGVDK.Filter = "MALOP ='" +MALOP+ "'";
+                DateTime temp = DateTime.Today;
+                try
+                {
+                    bdsGVDK.Filter = "MALOP ='" + MALOP + "' And NGAYTHI >= '" + temp + "' And NGAYTHI <'" + temp.AddDays(1) + "'";
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
                 //Is today([NGAYTHI]);
             }
             if (Program.mGroup == "GIANGVIEN")
@@ -65,7 +76,11 @@ namespace QLTN2
             cmbMAMH.DataSource = bdsGVDK;
             cmbMAMH.DisplayMember = "MAMH";
             cmbMAMH.ValueMember = "MAMH";
-            cmbMAMH.SelectedIndex = 0;
+            try
+            {
+                cmbMAMH.SelectedIndex = 0;
+            }
+            catch { }
             gridView1.OptionsCustomization.AllowFilter = false;
             gridView1.OptionsCustomization.AllowSort = false;
             rbg[1] = A; rbg[2] = B; rbg[3] = C; rbg[4] = D;
@@ -95,15 +110,29 @@ namespace QLTN2
         {
             try
             {
+                mamh = cmbMAMH.SelectedValue.ToString();
+                String strLenh = "Exec SP_KIEMTRA_THI '" + Program.username + "','" + mamh + "','" + lan + "'";
+                SqlDataReader myReader = Program.ExecSqlDataReader(strLenh);
+                if (myReader == null) { MessageBox.Show("Loi"); return; }
+                myReader.Read();
+                int kiemtra = myReader.GetInt32(0);
+                myReader.Close();
+                if (kiemtra == 1)
+                {
+                    MessageBox.Show("Bạn đã thi đợt thi hiện tại của môn học này", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
                 btnChon.Enabled = false;
                 cmbMAMH.Enabled = false;
                 String trinhdo = drv["TRINHDO"].ToString();
                 String socau = drv["SOCAUTHI"].ToString();
-                mamh = cmbMAMH.SelectedValue.ToString();
+                minute = Convert.ToInt32(drv["THOIGIAN"]);
                 socauthi = Convert.ToInt32(socau);
                 spnCau.Properties.MaxValue = socauthi;
                 lbSocau.Text = "/" + socau;
-                String strLenh = "EXEC sp_LAYDE '" + trinhdo + "','" + cmbMAMH.SelectedValue + "','" + socau + "'";
+                strLenh = "EXEC sp_LAYDE '" + trinhdo + "','" + cmbMAMH.SelectedValue + "','" + socau + "'";
+                bdsBaithi.Filter = "MASV = '" + Program.username + "' and MAMH = '" + mamh + "' and lan ='" + lan + "'";
+                bAITHIGridControl.DataSource = bdsBaithi;
                 tb = Program.ExecSqlDataTable(strLenh);
                 if (tb == null)
                     return;
@@ -115,6 +144,7 @@ namespace QLTN2
                     {
                         DataRowView drView = (DataRowView)bdsBaithi.Current;
                         drView["MASV"] = Program.username;
+                        drView["MAMH"] = mamh;
                         drView["MACAUHOI"] = dr["CAUHOI"];
                         drView["LAN"] = lan;
                         bdsBaithi.EndEdit();
@@ -252,13 +282,23 @@ namespace QLTN2
                 if (rbg[chon].Name == dapan)
                     socaudung++;
             }
-            Double diem = (10.0 / socauthi) * socaudung;
+            double diem = (10.0 / socauthi) * socaudung;
             diem = Math.Round(diem, 2);
             MessageBox.Show("Số câu đúng: "+ socaudung + "/" + socauthi +" câu\nBạn được: "+diem +" điểm");
+            thi = false;
             if (Program.mGroup == "SINHVIEN")
             {
-                taBaithi.Update(DS.BAITHI);
-                taBangdiem.Insert(Program.username, mamh, Convert.ToSByte(lan), NT, diem);
+                try
+                {
+                    taBangdiem.Insert(Program.username, mamh, Convert.ToSByte(lan), NT, diem);
+                    bdsBaithi.EndEdit();
+                    bdsBaithi.ResetCurrentItem();
+                    taBaithi.Update(DS.BAITHI);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
             }
         }
 
@@ -285,12 +325,15 @@ namespace QLTN2
 
         private void btnThi_Click(object sender, EventArgs e)
         {
+            thi = true;
             btnThi.Enabled = false;
             bdsBaithi.Position = 0;
             current = 0;
             loadCauhoi();
-            groupBox3.Visible = true;
-            btnPre.Enabled = false;
+            bAITHIGridControl.Enabled =groupBox3.Visible = true;
+            btnNop.Enabled = true;
+            timer.Interval = 1000;
+            timer.Start();
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -313,6 +356,21 @@ namespace QLTN2
                
             }
         }
+
+        private void frmThi_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (thi)
+            {
+                DialogResult rs =MessageBox.Show("Chương trình sẽ ghi lại kết quả thi.\n Bạn có chắc muốn thoát?", "Cảnh báo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (rs == DialogResult.No)
+                {
+                    //e.Cancel = true;
+                    return;
+                }
+                //nopBai();
+            }
+        }
+
         public static String fixTime(int minute, int sec)
         {
             String time = "";

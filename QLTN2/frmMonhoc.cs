@@ -35,6 +35,10 @@ namespace QLTN2
             this.taGVDK.Fill(this.DS.GIAOVIEN_DANGKY);
             this.taBangdiem.Fill(this.DS.BANGDIEM);
             groupBox1.Enabled = false;
+            if (Program.mGroup == "TRUONG")
+            {
+                btnBack.Enabled = btnThem.Enabled = btnSua.Enabled = btnXoa.Enabled = false;
+            }
         }
 
         private void btnThem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)

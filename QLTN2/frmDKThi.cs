@@ -43,7 +43,9 @@ namespace QLTN2
             cmbCS.DataSource = Program.bds_dspm;
             cmbCS.DisplayMember = "COSO";
             cmbCS.ValueMember = "TENSERVER";
+            cmbCS.SelectedIndex = 1;
             cmbCS.SelectedIndex = Program.mCoso;
+            this.cmbCS.SelectedIndexChanged += new System.EventHandler(this.cmbCS_SelectedIndexChanged);
 
             cmbMALOP.DataSource = bdsLop;
             cmbMALOP.DisplayMember = "MALOP";
@@ -58,7 +60,7 @@ namespace QLTN2
             minDate = DateTime.Now.Date;
             if (Program.mGroup == "TRUONG")
             {
-                btnBack.Enabled = btnThem.Enabled = btnSua.Enabled = false;
+                btnThem.Enabled = btnSua.Enabled =btnXoa.Enabled= false;
                 cmbCS.Enabled = true;
                 return;
             }
@@ -80,7 +82,7 @@ namespace QLTN2
             cSCT = spnSCT.Properties.MinValue;
             cNT = minDate;
             gIAOVIEN_DANGKYGridControl.Enabled = false;
-            groupBox1.Enabled = isThem = true;
+            groupBox1.Enabled = isThem  = btnBack.Enabled = true;
             them();
         }
 
@@ -91,7 +93,7 @@ namespace QLTN2
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
-            if (deNT.DateTime >= minDate)
+            if (deNT.DateTime.Date < minDate)
             {
                 MessageBox.Show("Ngày thi không hợp lệ !!");
                 return;
@@ -101,7 +103,9 @@ namespace QLTN2
             SqlDataReader myReader = Program.ExecSqlDataReader(strLenh);
             if (myReader == null) { MessageBox.Show("Loi"); return; }
             myReader.Read();
-            if (myReader.GetInt32(0) == 0)
+            int kiemtra = myReader.GetInt32(0);
+            myReader.Close();
+            if (kiemtra == 0)
             {
                 MessageBox.Show("Số lượng câu hỏi trong bộ đề của môn học này không đủ.\nXin bổ sung thêm trước khi đăng kí","",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 return;
@@ -130,6 +134,7 @@ namespace QLTN2
             }
             if (isSua)
             {
+                sua();
                 gIAOVIEN_DANGKYGridControl.Enabled = true;
                 groupBox1.Enabled = false;
             }
@@ -157,7 +162,13 @@ namespace QLTN2
 
         private void cmbCS_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(cmbCS.SelectedIndex != Program.mCoso)
+            try
+            {
+                Program.servername = cmbCS.SelectedValue.ToString();
+            }
+            catch { return; }
+            int cs = cmbCS.SelectedIndex;
+            if(cs != Program.mCoso)
             {
                 Program.login = Program.remotelogin;
                 Program.password = Program.remotepassword;
@@ -171,6 +182,55 @@ namespace QLTN2
                 return;
             taGVDK.Connection.ConnectionString = Program.connstr;
             this.taGVDK.Fill(this.DS.GIAOVIEN_DANGKY);
+        }
+
+        private void spnSCT_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (spnSCT.Value > spnSCT.Properties.MaxValue) {
+                spnSCT.Value = spnSCT.Properties.MaxValue;
+                return;
+            }
+            if(spnSCT.Value < spnSCT.Properties.MinValue)
+                spnSCT.Value = spnSCT.Properties.MinValue;
+        }
+
+        private void spnTG_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (spnTG.Value > spnTG.Properties.MaxValue)
+            {
+                spnTG.Value = spnTG.Properties.MaxValue;
+                return;
+            }
+            if (spnTG.Value < spnTG.Properties.MinValue)
+                spnTG.Value = spnTG.Properties.MinValue;
+        }
+
+
+
+        private void btnXoa_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            DialogResult rs = MessageBox.Show("Bạn có chắc muốn xóa đợt thi này?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (rs == DialogResult.No)
+                return;
+            try
+            {
+                bdsGVDK.EndEdit();
+                bdsGVDK.RemoveCurrent();
+                taGVDK.Update(DS.GIAOVIEN_DANGKY);
+            }
+            catch { }
+
+        }
+
+        private void spnLan_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (spnLan.Value > spnLan.Properties.MaxValue)
+            {
+                spnLan.Value = spnLan.Properties.MaxValue;
+                return;
+            }
+            if (spnLan.Value < spnLan.Properties.MinValue)
+                spnLan.Value = spnLan.Properties.MinValue;
         }
 
         private void btnSua_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -226,6 +286,7 @@ namespace QLTN2
         private void them()
         {
             bdsGVDK.AddNew();
+            cmbTrinhdo.SelectedIndex = cmbMALOP.SelectedIndex = cmbMAMH.SelectedIndex = 1;
             cmbTrinhdo.SelectedIndex = cmbMALOP.SelectedIndex = cmbMAMH.SelectedIndex = 0;
             deNT.DateTime = cNT;
             txtMAGV.Text = Program.username;

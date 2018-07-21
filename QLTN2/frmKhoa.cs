@@ -18,6 +18,7 @@ namespace QLTN2
         private String maCS;
         private String cMAKH, cTENKH;
         private DataRowView drv;
+        private int cs;
         public frmKhoa()
         {
             InitializeComponent();
@@ -35,11 +36,8 @@ namespace QLTN2
             cmbCS.ValueMember = "TENSERVER";
             maCS = ((DataRowView)bdsKhoa[0])["MACS"].ToString().Trim();
             cmbCS.SelectedIndex = Program.mCoso;
-            if (Program.mGroup == "SINHVIEN" || Program.mGroup == "GIAOVIEN" || Program.mGroup == "COSO")
-            {
-                cmbCS.Enabled = false;
-            }
-            else
+            this.cmbCS.SelectedIndexChanged += new System.EventHandler(this.cmbCS_SelectedIndexChanged);
+            if (Program.mGroup == "TRUONG")
             {
                 btnBack.Enabled = btnThem.Enabled = btnSua.Enabled = btnXoa.Enabled = false;
                 cmbCS.Enabled = true;
@@ -214,7 +212,26 @@ namespace QLTN2
 
         private void cmbCS_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            try
+            {
+                Program.servername = cmbCS.SelectedValue.ToString();
+            }
+            catch { return; }
+            cs = cmbCS.SelectedIndex;
+            if (cs != Program.mCoso)
+            {
+                Program.login = Program.remotelogin;
+                Program.password = Program.remotepassword;
+            }
+            else
+            {
+                Program.login = Program.mlogin;
+                Program.password = Program.mpassword;
+            }
+            if (Program.KetNoi() == 0)
+                return;
+            taKhoa.Connection.ConnectionString = Program.connstr;
+            this.taKhoa.Fill(this.DS.KHOA);
         }
     }
 }

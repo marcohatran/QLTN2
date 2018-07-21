@@ -129,12 +129,64 @@ namespace QLTN2
             rbDangnhap.Enabled = true;
             btnDangnhap.Enabled = true;
             btnDangxuat.Enabled = false;
-            frmDangnhap f = new frmDangnhap();
-            f.MdiParent = this;
-            f.Show();
+            Form frm;
+            foreach (Form f in this.MdiChildren) {
+                f.Close();
+            }
+            frm = new frmDangnhap();
+            frm.MdiParent = this;
+            frm.Show();
             this.MA.Text = "";
             this.HOTEN.Text = "";
             this.NHOM.Text = "";
+        }
+
+        private void barButtonItem8_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            Form f = this.CheckExists(typeof(frmLogin));
+            if (f != null) f.Activate();
+            else
+            {
+                f = new frmLogin();
+                f.MdiParent = this;
+                f.Show();
+            }
+        }
+
+        private void barButtonItem10_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            Form f = this.CheckExists(typeof(frmLop));
+            if (f != null) f.Activate();
+            else
+            {
+                f = new frmLop();
+                f.MdiParent = this;
+                f.Show();
+            }
+        }
+
+        private void barButtonItem9_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            Form f = this.CheckExists(typeof(frmSinhVien));
+            if (f != null) f.Activate();
+            else
+            {
+                f = new frmSinhVien();
+                f.MdiParent = this;
+                f.Show();
+            }
+        }
+
+        private void barButtonItem12_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            Form f = this.CheckExists(typeof(frmBangDiemTheoLop));
+            if (f != null) f.Activate();
+            else
+            {
+                f = new frmBangDiemTheoLop();
+                f.MdiParent = this;
+                f.Show();
+            }
         }
     }
 }

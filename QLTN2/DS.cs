@@ -6,3 +6,8 @@
     {
     }
 }
+
+namespace QLTN2.DSTableAdapters
+{
+
+}

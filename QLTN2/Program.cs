@@ -42,26 +42,26 @@ namespace QLTN2
         public static String mpassword = "";
         public static int mCoso = -1;
 
-        public static String [] strTrinhdo = {"A","B","C"};
+        public static String[] strTrinhdo = { "A", "B", "C" };
         public static BindingSource bds_dspm;
         public static frmMain frmChinh;
 
         public static int KetNoi()
         {
-            if(Program.conn != null && Program.conn.State == ConnectionState.Open)
+            if (Program.conn != null && Program.conn.State == ConnectionState.Open)
             {
                 Program.conn.Close();
             }
             try
             {
-                Program.connstr = "Data Source=" + Program.servername + ";Initial Catalog=" + 
-                      Program.database + ";User ID=" + 
+                Program.connstr = "Data Source=" + Program.servername + ";Initial Catalog=" +
+                      Program.database + ";User ID=" +
                       Program.login + ";password=" + Program.password;
                 Program.conn.ConnectionString = connstr;
                 Program.conn.Open();
                 return 1;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Lỗi kết nối CSDL.\nBạn xem lại username và password.\n" + ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return 0;
@@ -100,23 +100,59 @@ namespace QLTN2
         }
 
 
-            public static Boolean ExecSqlNonQuery(String strLenh)
+        public static Boolean ExecSqlNonQuery(String strLenh)
+        {
+            if (Program.conn.State == ConnectionState.Closed)
+                Program.conn.Open();
+            SqlCommand sqlcmd = Program.conn.CreateCommand();
+            try
             {
-                if (Program.conn.State == ConnectionState.Closed)
-                    Program.conn.Open();
-                SqlCommand sqlcmd = Program.conn.CreateCommand();
-                try
-                {
-                    sqlcmd.CommandText = strLenh;
-                    sqlcmd.ExecuteNonQuery();
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return false;
-                }
+                sqlcmd.CommandText = strLenh;
+                sqlcmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
-    }
+        public static int ExecCreateLogin(String LoginName, String pass, String username, String role)
+        {
+
+            SqlCommand Sqlcmd = new SqlCommand("SP_TAOLOGIN", Program.conn);
+            Sqlcmd.CommandType = CommandType.StoredProcedure;
+
+
+            SqlParameter parm = new SqlParameter("@Return", SqlDbType.Int);
+            parm.Direction = ParameterDirection.ReturnValue;
+
+            Sqlcmd.Parameters.Add(parm);
+            Sqlcmd.Parameters.Add(new SqlParameter("@LGNAME", LoginName));
+            Sqlcmd.Parameters.Add(new SqlParameter("@PASS", pass));
+            Sqlcmd.Parameters.Add(new SqlParameter("@USRNAME", username));
+
+            Sqlcmd.Parameters.Add(new SqlParameter("@ROLE", role));
+
+            if (Program.conn.State == ConnectionState.Closed)
+                Program.conn.Open();
+            try
+            {
+                int id = 0;
+
+                Sqlcmd.ExecuteNonQuery();
+                Program.conn.Close();
+                id = Convert.ToInt32(parm.Value);
+                return id;
+            }
+            catch (SqlException ex)
+            {
+                Program.conn.Close();
+                int id = Convert.ToInt32(parm.Value);
+                return id;
+                //  return 0;
+            }
+        } 
+     }
+}
 

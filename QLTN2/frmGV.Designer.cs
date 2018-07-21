@@ -172,6 +172,7 @@
             // btnBack
             // 
             this.btnBack.Caption = "Back";
+            this.btnBack.Enabled = false;
             this.btnBack.Id = 0;
             this.btnBack.Name = "btnBack";
             this.btnBack.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnBack_ItemClick);
@@ -254,6 +255,7 @@
             // tableAdapterManager
             // 
             this.tableAdapterManager.BackupDataSetBeforeUpdate = false;
+            this.tableAdapterManager.BAITHITableAdapter = null;
             this.tableAdapterManager.BANGDIEMTableAdapter = null;
             this.tableAdapterManager.BODETableAdapter = this.taBode;
             this.tableAdapterManager.COSOTableAdapter = null;
@@ -411,6 +413,7 @@
             this.txtHV.Name = "txtHV";
             this.txtHV.Properties.Appearance.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtHV.Properties.Appearance.Options.UseFont = true;
+            this.txtHV.Properties.MaxLength = 40;
             this.txtHV.Size = new System.Drawing.Size(246, 24);
             this.txtHV.TabIndex = 7;
             // 
@@ -422,6 +425,7 @@
             this.txtTen.Name = "txtTen";
             this.txtTen.Properties.Appearance.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTen.Properties.Appearance.Options.UseFont = true;
+            this.txtTen.Properties.MaxLength = 10;
             this.txtTen.Size = new System.Drawing.Size(253, 24);
             this.txtTen.TabIndex = 5;
             // 
@@ -433,6 +437,7 @@
             this.txtHo.Name = "txtHo";
             this.txtHo.Properties.Appearance.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtHo.Properties.Appearance.Options.UseFont = true;
+            this.txtHo.Properties.MaxLength = 40;
             this.txtHo.Size = new System.Drawing.Size(246, 24);
             this.txtHo.TabIndex = 3;
             // 
@@ -444,6 +449,7 @@
             this.txtMAGV.Name = "txtMAGV";
             this.txtMAGV.Properties.Appearance.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtMAGV.Properties.Appearance.Options.UseFont = true;
+            this.txtMAGV.Properties.MaxLength = 8;
             this.txtMAGV.Size = new System.Drawing.Size(246, 24);
             this.txtMAGV.TabIndex = 1;
             // 

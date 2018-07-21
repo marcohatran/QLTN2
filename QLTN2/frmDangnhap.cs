@@ -31,7 +31,8 @@ namespace QLTN2
             {
                 MessageBox.Show(ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            cOSOComboBox.SelectedIndex = -1;
+            cOSOComboBox.SelectedIndex = 1;
+            cOSOComboBox.SelectedIndex = 0;
 
         }
 
@@ -48,14 +49,19 @@ namespace QLTN2
             Program.servername = cOSOComboBox.SelectedValue.ToString();
             if (Program.KetNoi() == 0) return;
             SqlDataReader myReader;
-
-            String strLenh = "exec SP_DANGNHAP '" + Program.mlogin + "'";
+            
+            String strLenh = "exec SP_DANGNHAP '" + Program.login + "'";
             myReader = Program.ExecSqlDataReader(strLenh);
             if (myReader == null) return;
             myReader.Read();
 
-
-            Program.username = myReader.GetString(0);     // Lay user name
+            try
+            {
+                Program.username = myReader.GetString(0);     // Lay user name
+            }
+            catch (Exception ex){
+                MessageBox.Show(ex.Message);
+                    return; }
             if (Convert.IsDBNull(Program.username))
             {
                 MessageBox.Show("Login bạn nhập không có quyền truy cập dữ liệu\n Bạn xem lại username, password", "", MessageBoxButtons.OK);

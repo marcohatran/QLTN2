@@ -29,10 +29,10 @@ namespace QLTN2
 
         private void fromGV_Load(object sender, EventArgs e)
         {
-            taBode.Connection.ConnectionString += ";password=123";
-            this.taGV.Connection.ConnectionString += ";password=123";
-            this.taGVDK.Connection.ConnectionString += ";password=123";
-            taKhoa.Connection.ConnectionString += ";password=123";
+            taBode.Connection.ConnectionString =
+            this.taGV.Connection.ConnectionString =
+            this.taGVDK.Connection.ConnectionString =
+            taKhoa.Connection.ConnectionString = Program.connstr;
 
             this.taKhoa.Fill(this.DS.KHOA);
             cmbMAKH.DataSource = bdsKhoa;
@@ -41,18 +41,23 @@ namespace QLTN2
 
             String strFilter = "";
             int count = cmbMAKH.Items.Count;
-            for (int i = 0; i < count-1; i++)
+            for (int i = 0; i < count - 1; i++)
             {
                 cmbMAKH.SelectedIndex = i;
-                strFilter += "[MAKH] = '" + cmbMAKH.SelectedValue +"'OR ";
+                strFilter += "[MAKH] = '" + cmbMAKH.SelectedValue + "'OR ";
             }
             cmbMAKH.SelectedIndex = count - 1;
-            strFilter += "[MAKH] = '" + cmbMAKH.SelectedValue +"'";
-            filterInfo = new ViewColumnFilterInfo(gridView1.Columns["MAKH"], new ColumnFilterInfo (strFilter));
-            
+            strFilter += "[MAKH] = '" + cmbMAKH.SelectedValue + "'";
+            filterInfo = new ViewColumnFilterInfo(gridView1.Columns["MAKH"], new ColumnFilterInfo(strFilter));
+
             this.taGV.Fill(this.DS.GIAOVIEN);
             this.taBode.Fill(this.DS.BODE);
-            this.taGVDK.Fill(this.DS.GIAOVIEN_DANGKY);
+            this.taGVDK.Fill(this.DS.GIAOVIEN_DANGKY); 
+            if (Program.mGroup == "TRUONG")
+            {
+                btnThem.Enabled = btnSua.Enabled = btnXoa.Enabled = false;
+
+            }
         }
 
         private void btnLuu_Click(object sender, EventArgs e)
@@ -101,6 +106,7 @@ namespace QLTN2
             }
             if (isSua)
             {
+                sua();
                 gIAOVIENGridControl.Enabled = true;
                 groupBox1.Enabled = false;
             }
@@ -126,6 +132,7 @@ namespace QLTN2
             cmbMAKH.DropDownStyle = ComboBoxStyle.DropDownList;
             cMAGV = cHo = cTen = cHV = "";
             cmbMAKH.SelectedIndex = 0;
+            cMAKH = cmbMAKH.SelectedValue.ToString();
             groupBox1.Enabled = btnBack.Enabled = true;
             btnThem.Enabled = btnSua.Enabled = btnXoa.Enabled = btnLammoi.Enabled = false;
             current = bdsGV.Position;
@@ -137,6 +144,8 @@ namespace QLTN2
         private void them()
         {
             bdsGV.AddNew();
+            cmbMAKH.SelectedIndex = 1;
+            cmbMAKH.SelectedIndex = 0;
             txtMAGV.Focus();
         }
 
@@ -208,8 +217,8 @@ namespace QLTN2
 
         private void btnBack_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            if (cMAGV !=null &&(txtMAGV.Text.Trim() != cMAGV || txtHo.Text.Trim() != cHo || txtTen.Text.Trim() != cTen 
-                || txtHV.Text.Trim() != cHV || cmbMAKH.SelectedValue.ToString().Trim() != cMAKH))
+            if (cMAGV != null && (txtMAGV.Text.Trim() != cMAGV || txtHo.Text.Trim() != cHo || txtTen.Text.Trim() != cTen
+                || txtHV.Text.Trim() != cHV || cmbMAKH.SelectedValue.ToString() != cMAKH))
             {
                 DialogResult rs = MessageBox.Show("Bạn có chắc muốn bỏ thông tin đang cập nhật ??\nNếu có dữ liệu sẽ khôi phục lại ban đầu", "Cảnh báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (rs == DialogResult.No)

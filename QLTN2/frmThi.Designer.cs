@@ -173,11 +173,13 @@
             // 
             this.lbTGThi.AutoSize = true;
             this.lbTGThi.Font = new System.Drawing.Font("Times New Roman", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTGThi.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lbTGThi.Location = new System.Drawing.Point(79, 68);
             this.lbTGThi.Name = "lbTGThi";
             this.lbTGThi.Size = new System.Drawing.Size(115, 27);
             this.lbTGThi.TabIndex = 0;
             this.lbTGThi.Text = "Thời gian :";
+            this.lbTGThi.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnChon
             // 
@@ -191,29 +193,32 @@
             // lbMALOP
             // 
             this.lbMALOP.AutoSize = true;
-            this.lbMALOP.Location = new System.Drawing.Point(51, 50);
+            this.lbMALOP.Location = new System.Drawing.Point(8, 55);
             this.lbMALOP.Name = "lbMALOP";
             this.lbMALOP.Size = new System.Drawing.Size(50, 17);
             this.lbMALOP.TabIndex = 7;
             this.lbMALOP.Text = "Mã lớp";
+            this.lbMALOP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbTENLOP
             // 
             this.lbTENLOP.AutoSize = true;
-            this.lbTENLOP.Location = new System.Drawing.Point(48, 81);
+            this.lbTENLOP.Location = new System.Drawing.Point(8, 86);
             this.lbTENLOP.Name = "lbTENLOP";
             this.lbTENLOP.Size = new System.Drawing.Size(53, 17);
             this.lbTENLOP.TabIndex = 6;
             this.lbTENLOP.Text = "Tên lớp";
+            this.lbTENLOP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbLan
             // 
             this.lbLan.AutoSize = true;
-            this.lbLan.Location = new System.Drawing.Point(70, 174);
+            this.lbLan.Location = new System.Drawing.Point(8, 179);
             this.lbLan.Name = "lbLan";
             this.lbLan.Size = new System.Drawing.Size(31, 17);
             this.lbLan.TabIndex = 5;
             this.lbLan.Text = "Lần";
+            this.lbLan.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // cmbMAMH
             // 
@@ -227,11 +232,12 @@
             // lbNT
             // 
             this.lbNT.AutoSize = true;
-            this.lbNT.Location = new System.Drawing.Point(43, 143);
+            this.lbNT.Location = new System.Drawing.Point(8, 148);
             this.lbNT.Name = "lbNT";
             this.lbNT.Size = new System.Drawing.Size(58, 17);
             this.lbNT.TabIndex = 4;
             this.lbNT.Text = "Ngày thi";
+            this.lbNT.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // timer
             // 
@@ -250,6 +256,7 @@
             // 
             this.bAITHIGridControl.DataSource = this.bdsBaithi;
             this.bAITHIGridControl.Dock = System.Windows.Forms.DockStyle.Left;
+            this.bAITHIGridControl.Enabled = false;
             this.bAITHIGridControl.Location = new System.Drawing.Point(0, 0);
             this.bAITHIGridControl.MainView = this.gridView1;
             this.bAITHIGridControl.Name = "bAITHIGridControl";
@@ -468,6 +475,7 @@
             this.Name = "frmThi";
             this.Text = "frmThi";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmThi_FormClosing);
             this.Load += new System.EventHandler(this.frmThi_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DS)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bdsGVDK)).EndInit();
